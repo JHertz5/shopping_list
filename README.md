@@ -1,0 +1,5 @@
+# shopping_list
+python script to generate shopping list from Google Sheets spreadsheet
+
+This is a python script to automate the process of creating a shopping list. The script pulls shopping list data from my [Google Sheets spreadsheet](https://docs.google.com/spreadsheets/d/17Rz_LtAQ1LwB1cfCZZSNrlJu1g-M5W7wxDtt7iOh0yY/edit?usp=sharing). This data consists of Ingredients, Recipes, and Input. These are pretty self explanatory if you look at the spreadsheet. Once the data has been collected and processed, the shopping list is emailed to a specified email address. 
+The script requires a few extra personalised files to be used, contact me for details.
