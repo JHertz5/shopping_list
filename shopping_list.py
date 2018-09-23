@@ -55,7 +55,7 @@ while True:
     if row == []: # end of table reached
         break
     else:
-        recipes[row[0]] = row[2:] # use header column as key for list, skip recipe link
+        recipes[row[0]] = row[1:] # use header column as key for list
         rowIndex += 1
 
 # extract data from 3rd sheet - input data lists
