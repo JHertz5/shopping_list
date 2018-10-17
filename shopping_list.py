@@ -21,13 +21,13 @@ sheets = client.open("Shopping List").worksheets()
 
 print('data connected')
 
-# extract and display order options
-print('Categorisation Options')
+# extract and display sort options
+print('Sort Options')
 categoryOptions = ['Unordered'] + sheets[0].row_values(1)[1:] # skip Item column
 for index,categoryOption in enumerate(categoryOptions):
     print('\t{}({})'.format(categoryOption,index))
 # input selection
-categorySelection = int(input('Pick order: '))
+categorySelection = int(input('Pick sort method: '))
 # check validity of selection
 if categorySelection < 0:
     raise ValueError('categorySelection must be >= 0')
@@ -36,16 +36,18 @@ elif categorySelection > len(categoryOptions):
 
 print('{} selected'.format(categoryOptions[categorySelection]))
 
-# extract data from 1st sheet - items to sort order dictionary
+# extract data from 1st sheet - items to sort aisle dictionary
 items = sheets[0].col_values(1)[1:] # get items, skip header row
 if categorySelection == 0: # if unordered
-    order = [1]*len(items) # equal order category for every item
+    aisleGroups = [1]*len(items) # equal aisleGroup category for every item
 else:
-    order = sheets[0].col_values(categorySelection+1)[1:] # get order values, skip header row
-# order items in dict
-itemOrder = {}
-for index,item in enumerate(items):
-    itemOrder[item] = int(order[index])
+    # get aisleGroup values, skip header row
+    aisleGroups = list(map(int,sheets[0].col_values(categorySelection+1)[1:]))
+#itemsAisleGroup = dict(zip(items,aisleGroups))
+
+aisleGroupItems = {x:set() for x in set(aisleGroups)}
+for (aisleGroup,item) in zip(aisleGroups,items):
+    aisleGroupItems[aisleGroup].add(item)
 
 # extract data from 2nd sheet - recipe to items dictionary
 recipes = {}
@@ -71,22 +73,17 @@ for meal in mealsToBuy:
     shoppingList = shoppingList.union(recipes[meal])
 
 # removing excluded items and add extras
-for exclusion in exclusions:
-    shoppingList.discard(exclusion)
-shoppingList = shoppingList.union(extras)
+shoppingList.difference(exclusions) # remove excluded items
+shoppingList = shoppingList.union(extras) # TODO move this to after aisleGroup is assigned?
 
-# sorting according to mapping value and combining into one string
-shoppingList = sorted(list(shoppingList),key=lambda x:itemOrder[x]) # TODO new name
+# dict with aisle number as key and item list as value
+aisleGroupList = sorted(aisleGroupItems.keys())
+shoppingList_seperatedByAisle = [aisleGroupItems[x].intersection(shoppingList) for x in
+                                 aisleGroupList]
+shoppingList_seperatedByAisle = [x for x in shoppingList_seperatedByAisle if x != set()]
 
-# copy items to new list while adding seperators
-currentOrder = 0
-shoppingList_seperated = []
-for item in shoppingList:
-    if itemOrder[item] != currentOrder:
-        shoppingList_seperated.append('\n'+item) # move item to new list with seperator
-        currentOrder = itemOrder[item] # update order
-    else:
-        shoppingList_seperated.append(item) # move item to new list
+# convert groups to string with newline seperation
+shoppingList_stringList = ['\n'.join(x) for x in shoppingList_seperatedByAisle]
 
 print('shopping list generated')
 
@@ -96,11 +93,10 @@ subject = 'Shopping List ' + date # create subject for email
 message = '\n'.join([
                 '\nMeals:\n',
                 '\n'.join(mealsToBuy),
-                '\nItems:',
-                '\n'.join(shoppingList_seperated)
+                '\nItems:\n(shop location not known)',
+                '\n\n'.join(shoppingList_stringList)
                 ])
 
 send_email.sendEmail(subject,message)
 
 print('email sent')
-#print('NOTE - email suppressed')
