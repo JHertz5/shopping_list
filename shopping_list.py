@@ -43,7 +43,6 @@ if categorySelection == 0: # if unordered
 else:
     # get aisleGroup values, skip header row
     aisleGroups = list(map(int,sheets[0].col_values(categorySelection+1)[1:]))
-#itemsAisleGroup = dict(zip(items,aisleGroups))
 
 aisleGroupItems = {x:set() for x in set(aisleGroups)}
 for (aisleGroup,item) in zip(aisleGroups,items):
@@ -63,7 +62,7 @@ while True:
 # extract data from 3rd sheet - input data lists
 mealsToBuy = sheets[2].col_values(1)[1:] # get meals        , skip header row
 exclusions = sheets[2].col_values(2)[1:] # get exclusions   , skip header row
-extras     = sheets[2].col_values(3)[1:] # get extras       , skip header row
+extras     = set(sheets[2].col_values(3)[1:]) # get extras  , skip header row
 
 print('data retrieved')
 
@@ -74,13 +73,17 @@ for meal in mealsToBuy:
 
 # removing excluded items and add extras
 shoppingList.difference(exclusions) # remove excluded items
-shoppingList = shoppingList.union(extras) # TODO move this to after aisleGroup is assigned?
+shoppingList = shoppingList.union(extras)
 
 # dict with aisle number as key and item list as value
 aisleGroupList = sorted(aisleGroupItems.keys())
 shoppingList_seperatedByAisle = [aisleGroupItems[x].intersection(shoppingList) for x in
                                  aisleGroupList]
 shoppingList_seperatedByAisle = [x for x in shoppingList_seperatedByAisle if x != set()]
+
+# Add any unsupported extras
+unorderdExtras = extras.difference(items)
+shoppingList_seperatedByAisle[0] = shoppingList_seperatedByAisle[0].union(unorderdExtras)
 
 # convert groups to string with newline seperation
 shoppingList_stringList = ['\n'.join(x) for x in shoppingList_seperatedByAisle]
