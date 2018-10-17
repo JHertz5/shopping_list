@@ -45,7 +45,7 @@ else:
 # order items in dict
 itemOrder = {}
 for index,item in enumerate(items):
-    itemOrder[item] = order[index]
+    itemOrder[item] = int(order[index])
 
 # extract data from 2nd sheet - recipe to items dictionary
 recipes = {}
@@ -76,7 +76,7 @@ for exclusion in exclusions:
 shoppingList = shoppingList.union(extras)
 
 # sorting according to mapping value and combining into one string
-shoppingList = sorted(list(shoppingList),key=lambda x:itemOrder[x])
+shoppingList = sorted(list(shoppingList),key=lambda x:itemOrder[x]) # TODO new name
 
 # copy items to new list while adding seperators
 currentOrder = 0
