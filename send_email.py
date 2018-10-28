@@ -1,5 +1,5 @@
 '''
-module to send an email to jukka.hertzog@live.co.uk through shoppinglist44@gmail.co.uk
+module to send an email to jukka.hertzog@live.co.uk through shoppinglist44@gmail.com
 written for automated shopping list project
 '''
 
