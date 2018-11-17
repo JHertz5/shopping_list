@@ -72,7 +72,7 @@ for meal in mealsToBuy:
     shoppingList = shoppingList.union(recipes[meal])
 
 # removing excluded items and add extras
-shoppingList.difference(exclusions) # remove excluded items
+shoppingList = shoppingList.difference(exclusions) # remove excluded items
 shoppingList = shoppingList.union(extras)
 
 # dict with aisle number as key and item list as value
@@ -87,7 +87,6 @@ shoppingList_seperatedByAisle[0] = shoppingList_seperatedByAisle[0].union(unorde
 
 # convert groups to string with newline seperation
 shoppingList_stringList = ['\n'.join(x) for x in shoppingList_seperatedByAisle]
-
 print('shopping list generated')
 
 date = time.strftime("%d/%m/%Y-%H:%M:%S") # get date for subject line
@@ -96,7 +95,7 @@ subject = 'Shopping List ' + date # create subject for email
 message = '\n'.join([
                 '\nMeals:\n',
                 '\n'.join(mealsToBuy),
-                '\nItems:\n(shop location not known)',
+                '\nItems\n:',
                 '\n\n'.join(shoppingList_stringList)
                 ])
 
