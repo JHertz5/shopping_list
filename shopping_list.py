@@ -60,11 +60,17 @@ while True:
         rowIndex += 1
 
 # extract data from 3rd sheet - input data lists
-mealsToBuy = sheets[2].col_values(1)[1:] # get meals        , skip header row
-exclusions = sheets[2].col_values(2)[1:] # get exclusions   , skip header row
-extras     = set(sheets[2].col_values(3)[1:]) # get extras  , skip header row
+# store data in sets to remove duplicates
+mealsToBuy = set(sheets[2].col_values(1)[1:]) # get meals      , skip header row
+exclusions = set(sheets[2].col_values(2)[1:]) # get exclusions , skip header row
+extras     = set(sheets[2].col_values(3)[1:]) # get extras     , skip header row
 
 print('data retrieved')
+
+# discard empty values from input data
+mealsToBuy.discard('')
+exclusions.discard('')
+extras.discard('')
 
 # combine meal recipes into items list (using set to avoid duplication)
 shoppingList = set()
@@ -95,7 +101,7 @@ subject = 'Shopping List ' + date # create subject for email
 message = '\n'.join([
                 '\nMeals:\n',
                 '\n'.join(mealsToBuy),
-                '\nItems\n:',
+                '\nItems:\n',
                 '\n\n'.join(shoppingList_stringList)
                 ])
 
