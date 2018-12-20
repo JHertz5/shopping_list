@@ -1,5 +1,5 @@
 '''
-ShoppingList v2.0
+ShoppingList v3.0
 This script :
     extracts data from google sheets file
     manipulates data to generate shopping list
@@ -11,66 +11,84 @@ from oauth2client.service_account import ServiceAccountCredentials
 import time
 import send_email
 
-#use creds to create a client to interact with the Google Drive API
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('Shopping List-32ab969084cf.json', scope)
-client = gspread.authorize(creds)
+index_skipHeader = 1
 
-# Find a workbook by name and open sheets
-sheets = client.open("Shopping List").worksheets()
+def openWorksheets():
+    #use creds to create a client to interact with the Google Drive API
+    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+    creds = ServiceAccountCredentials.from_json_keyfile_name('Shopping List-32ab969084cf.json', scope)
+    client = gspread.authorize(creds)
 
+    # Find a workbook by name and open sheets
+    return client.open("Shopping List").worksheets()
+
+def selectGrouping(groupingOptions_minusUnordered):
+    print('\nsort options:')
+    groupingOptions = ['Unordered'] + groupingOptions_minusUnordered
+    for index,groupingOption in enumerate(groupingOptions):
+        print('\t{}({})'.format(groupingOption,index))
+    # input selection
+    groupingSelection = int(input('Pick sort method: '))
+    # check validity of selection
+    if groupingSelection < 0:
+        raise ValueError('groupingSelection must be >= 0')
+    elif groupingSelection > len(groupingOptions):
+        raise ValueError('groupingSelection must be <= len(groupingOptions)')
+
+    print('{} selected\n'.format(groupingOptions[groupingSelection]))
+    return groupingSelection
+
+def processData_ItemGroup(itemGroupsRaw, groupingSelection):
+    itemNames = itemGroupsRaw[0][index_skipHeader:] # get items, skip header row
+    if groupingSelection == 0: # if unordered
+        aisleGroups = [1]*len(itemNames) # equal aisleGroup for every item
+    else:
+        # convert group values into list of ints
+        aisleGroups = list(map(int,itemGroupsRaw[groupingSelection][index_skipHeader:]))
+
+    aisleGroupItems = {x:set() for x in set(aisleGroups)}
+    for (aisleGroup,itemName) in zip(aisleGroups,itemNames):
+        aisleGroupItems[aisleGroup].add(itemName)
+    return aisleGroupItems, itemNames
+
+
+def getAndProcessData_Recipes():
+    recipesRaw = sheets[1].get_all_values()
+    recipes = {}
+    for recipe in recipesRaw:
+        # create dict entry of recipe name : recipe ingredients
+        recipes[recipe[0]] = [x for x in recipe if x != '']
+    return recipes
+
+def getAndProcessData_Input():
+    inputRaw = sheets[2].get_all_values()
+    # process each input set
+    inputSets = []
+    for listIndex in range(3):
+        inputSets.append(set(inputRaw[listIndex][index_skipHeader:]))
+        inputSets[listIndex].discard('')
+    return inputSets
+
+###########################
+# START OF CODE EXECUTION #
+###########################
+
+sheets = openWorksheets()
 print('data connected')
 
-# extract and display sort options
-print('Sort Options')
-categoryOptions = ['Unordered'] + sheets[0].row_values(1)[1:] # skip Item column
-for index,categoryOption in enumerate(categoryOptions):
-    print('\t{}({})'.format(categoryOption,index))
-# input selection
-categorySelection = int(input('Pick sort method: '))
-# check validity of selection
-if categorySelection < 0:
-    raise ValueError('categorySelection must be >= 0')
-elif categorySelection > len(categoryOptions):
-    raise ValueError('categorySelection must be <= len(categoryOptions)')
+# extract data from item group sheet
+itemGroupsRaw = sheets[0].get_all_values() # get itemGroups data
+groupingOptions = [ x[0] for x in itemGroupsRaw[index_skipHeader:] ]
+groupingSelection = selectGrouping(groupingOptions)
+aisleGroupItems,itemNames = processData_ItemGroup(itemGroupsRaw, groupingSelection)
 
-print('{} selected'.format(categoryOptions[categorySelection]))
+# extract data from recipe sheet
+recipes = getAndProcessData_Recipes()
 
-# extract data from 1st sheet - items to sort aisle dictionary
-items = sheets[0].col_values(1)[1:] # get items, skip header row
-if categorySelection == 0: # if unordered
-    aisleGroups = [1]*len(items) # equal aisleGroup category for every item
-else:
-    # get aisleGroup values, skip header row
-    aisleGroups = list(map(int,sheets[0].col_values(categorySelection+1)[1:]))
-
-aisleGroupItems = {x:set() for x in set(aisleGroups)}
-for (aisleGroup,item) in zip(aisleGroups,items):
-    aisleGroupItems[aisleGroup].add(item)
-
-# extract data from 2nd sheet - recipe to items dictionary
-recipes = {}
-rowIndex = 2; # skip header row
-while True:
-    row = sheets[1].row_values(rowIndex)
-    if row == []: # end of table reached
-        break
-    else:
-        recipes[row[0]] = row[1:] # use header column as key for list
-        rowIndex += 1
-
-# extract data from 3rd sheet - input data lists
-# store data in sets to remove duplicates
-mealsToBuy = set(sheets[2].col_values(1)[1:]) # get meals      , skip header row
-exclusions = set(sheets[2].col_values(2)[1:]) # get exclusions , skip header row
-extras     = set(sheets[2].col_values(3)[1:]) # get extras     , skip header row
+# extract data from input sheet
+(mealsToBuy,exclusions, extras) = getAndProcessData_Input()
 
 print('data retrieved')
-
-# discard empty values from input data
-mealsToBuy.discard('')
-exclusions.discard('')
-extras.discard('')
 
 # combine meal recipes into items list (using set to avoid duplication)
 shoppingList = set()
@@ -81,18 +99,20 @@ for meal in mealsToBuy:
 shoppingList = shoppingList.difference(exclusions) # remove excluded items
 shoppingList = shoppingList.union(extras)
 
-# dict with aisle number as key and item list as value
+# create shoppingList_grouped, dict[aisle number] = item list
 aisleGroupList = sorted(aisleGroupItems.keys())
-shoppingList_seperatedByAisle = [aisleGroupItems[x].intersection(shoppingList) for x in
-                                 aisleGroupList]
-shoppingList_seperatedByAisle = [x for x in shoppingList_seperatedByAisle if x != set()]
+shoppingList_grouped = [
+    aisleGroupItems[x].intersection(shoppingList) for x in aisleGroupList
+    ]
+# remove empty groups from shoppingList_grouped
+shoppingList_grouped = [x for x in shoppingList_grouped if x != set()]
 
-# Add any unsupported extras
-unorderdExtras = extras.difference(items)
-shoppingList_seperatedByAisle[0] = shoppingList_seperatedByAisle[0].union(unorderdExtras)
+# Add any extras without item groups to group 0
+unorderdExtras = extras.difference(itemNames)
+shoppingList_grouped[0] = shoppingList_grouped[0].union(unorderdExtras)
 
 # convert groups to string with newline seperation
-shoppingList_stringList = ['\n'.join(x) for x in shoppingList_seperatedByAisle]
+shoppingList_stringList = ['\n'.join(x) for x in shoppingList_grouped]
 print('shopping list generated')
 
 date = time.strftime("%d/%m/%Y-%H:%M:%S") # get date for subject line
@@ -108,3 +128,4 @@ message = '\n'.join([
 send_email.sendEmail(subject,message)
 
 print('email sent')
+print(message)
