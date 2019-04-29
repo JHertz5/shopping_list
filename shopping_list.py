@@ -38,19 +38,36 @@ def selectGrouping(groupingOptions_minusUnordered):
     print('{} selected\n'.format(groupingOptions[groupingSelection]))
     return groupingSelection
 
-def processData_ItemGroup(itemGroupsRaw, groupingSelection):
-    itemNames = itemGroupsRaw[0][index_skipHeader:] # get items, skip header row
+def getData_ItemGroup():
+    # extract data from item group sheet
+    itemGroupingRecords = sheets[0].get_all_records() # get data from sheet
+
+    groupingOptions = list(itemGroupingRecords[0].keys())[1:] # get names of grouping options
+    groupingSelection = selectGrouping(groupingOptions)
+    return itemGroupingRecords, groupingSelection
+
+def processData_ItemGroup(itemGroupingRecords, groupingSelection):
+    recordKeys = list(itemGroupingRecords[0].keys())
+    itemNamesKey = recordKeys[0]
+    groupingSelectionKey = recordKeys[groupingSelection]
+
+    # extract data into lists
+    itemNames = [x[itemNamesKey] for x in itemGroupingRecords]
     if groupingSelection == 0: # if unordered
         aisleGroups = [1]*len(itemNames) # equal aisleGroup for every item
     else:
         # convert group values into list of ints
-        aisleGroups = list(map(int,itemGroupsRaw[groupingSelection][index_skipHeader:]))
+        aisleGroups = [x[groupingSelectionKey] for x in itemGroupingRecords]
 
+    # arrange data into list of sets
     aisleGroupItems = {x:set() for x in set(aisleGroups)}
     for (aisleGroup,itemName) in zip(aisleGroups,itemNames):
         aisleGroupItems[aisleGroup].add(itemName)
     return aisleGroupItems, itemNames
 
+def getAndProcess_ItemGroup():
+    itemGroupingRecords, groupingSelection = getData_ItemGroup()
+    return processData_ItemGroup(itemGroupingRecords, groupingSelection)
 
 def getAndProcessData_Recipes():
     recipesRaw = sheets[1].get_all_values()
@@ -64,29 +81,29 @@ def getAndProcessData_Input():
     inputRaw = sheets[2].get_all_values()
     # process each input set
     inputSets = []
-    for listIndex in range(3):
-        inputSets.append(set(inputRaw[listIndex][index_skipHeader:]))
-        inputSets[listIndex].discard('')
-    return inputSets
+    for listIndex in range(1,4):
+        # pull column data into set
+        inputSets.append(set(sheets[2].col_values(listIndex)[index_skipHeader:]))
+    return inputSets #(mealsToBuy, exclusions, extras)
 
-###########################
-# START OF CODE EXECUTION #
-###########################
+def convertRecordsToDict(records): #TODO remove? unused?
+    """ converts records (list of dicts) to single dict """
+    headings = list(records[0].keys())
+    dict = {}
+    for heading in headings:
+        dict[heading] = [x[heading] for x in records]
+    return dict
 
 sheets = openWorksheets()
 print('data connected')
 
-# extract data from item group sheet
-itemGroupsRaw = sheets[0].get_all_values() # get itemGroups data
-groupingOptions = [ x[0] for x in itemGroupsRaw[index_skipHeader:] ]
-groupingSelection = selectGrouping(groupingOptions)
-aisleGroupItems,itemNames = processData_ItemGroup(itemGroupsRaw, groupingSelection)
+aisleGroupItems,itemNames = getAndProcess_ItemGroup()
 
 # extract data from recipe sheet
 recipes = getAndProcessData_Recipes()
 
 # extract data from input sheet
-(mealsToBuy,exclusions, extras) = getAndProcessData_Input()
+(mealsToBuy, exclusions, extras) = getAndProcessData_Input()
 
 print('data retrieved')
 
