@@ -1,13 +1,3 @@
-'''
-ShoppingList
-This script :
-    extracts data from google sheets file
-    manipulates data to generate shopping list
-    pushes shopping list to phone via pushbullet (to be opened with SimpleTask)
-'''
-
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import database_interface
 import checklist_file_generator
 import push_file
