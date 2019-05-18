@@ -47,7 +47,7 @@ shoppingList_grouped = [x for x in shoppingList_grouped if x != set()]
 
 # Add any extras without item groups to group 0
 unorderdExtras = extras.difference(itemNames)
-shoppingList_grouped[0] = shoppingList_grouped[0].union(unorderdExtras)
+shoppingList_grouped.append(unorderdExtras)
 
 print('shopping list generated')
 
