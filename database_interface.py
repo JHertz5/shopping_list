@@ -76,5 +76,8 @@ def getAndProcessData_Input(sheets):
     inputSets = []
     for listIndex in range(1,4):
         # pull column data into set
-        inputSets.append(set(sheets[2].col_values(listIndex)[1:]))
+        columnData = set(sheets[2].col_values(listIndex)[1:])
+        columnData.discard('') # remove any empty strings
+        inputSets.append(columnData)
+
     return inputSets #(mealsToBuy, exclusions, extras)
