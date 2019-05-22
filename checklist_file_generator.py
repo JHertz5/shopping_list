@@ -2,7 +2,7 @@ def generate(mealsToBuy,shoppingList_grouped):
     filename = 'checklist.txt'
     with open(filename,'w') as checklist_file:
         for meal in mealsToBuy:
-            line = generate_checklist_line(meal,'meals to buy')
+            line = generate_checklist_line(meal,'meals')
             checklist_file.write(line)
 
         for (group_id,group) in enumerate(shoppingList_grouped):
