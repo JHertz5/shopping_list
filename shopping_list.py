@@ -23,50 +23,62 @@ print('items retrieved')
 # extract data from recipe sheet
 recipes = database_interface.getAndProcessData_Recipes(sheets)
 print('recipes retrieved')
-# extract data from input sheet
-(mealsToBuy, exclusions, extras) = database_interface.getAndProcessData_Input(sheets)
-print('input data retrieved')
-print('data retrieved')
 
-# combine meal recipes into items list (using set to avoid duplication)
-shoppingList = set()
-for meal in mealsToBuy:
-    shoppingList = shoppingList.union(recipes[meal])
+generateList = True
+while generateList:
+    # extract data from input sheet
+    (mealsToBuy, exclusions, extras) = database_interface.getAndProcessData_Input(sheets)
+    print('input data retrieved')
+    print('data retrieved')
 
-# removing excluded items and add extras
-shoppingList = shoppingList.difference(exclusions) # remove excluded items
-shoppingList = shoppingList.union(extras)
+    # combine meal recipes into items list (using set to avoid duplication)
+    shoppingList = set()
+    for meal in mealsToBuy:
+        shoppingList = shoppingList.union(recipes[meal])
 
-# create shoppingList_grouped, dict[aisle number] = item list
-aisleGroupList = sorted(aisleGroupItems.keys())
-shoppingList_grouped = [
-    aisleGroupItems[x].intersection(shoppingList) for x in aisleGroupList
-    ]
-# remove empty groups from shoppingList_grouped
-shoppingList_grouped = [x for x in shoppingList_grouped if x != set()]
+    # removing excluded items and add extras
+    shoppingList = shoppingList.difference(exclusions) # remove excluded items
+    shoppingList = shoppingList.union(extras)
 
-# Add any extras without item groups to group 0
-unorderdExtras = extras.difference(itemNames)
-if len(unorderdExtras) > 0:
-    shoppingList_grouped.append(unorderdExtras)
+    # create shoppingList_grouped, dict[aisle number] = item list
+    aisleGroupList = sorted(aisleGroupItems.keys())
+    shoppingList_grouped = [
+        aisleGroupItems[x].intersection(shoppingList) for x in aisleGroupList
+        ]
+    # remove empty groups from shoppingList_grouped
+    shoppingList_grouped = [x for x in shoppingList_grouped if x != set()]
 
-print('shopping list generated')
+    # Add any extras without item groups to group 0
+    unorderdExtras = extras.difference(itemNames)
+    if len(unorderdExtras) > 0:
+        shoppingList_grouped.append(unorderdExtras)
 
-preview_list(shoppingList_grouped)
+    print('shopping list generated')
 
-# ask user whether to push shopping list to phone
-sendList_question = 'send list? (y/n)\n'
-sendList_input = input(sendList_question)
-while sendList_input not in ['y','n']:
-    print('{} is not valid input, input y or n'.format(sendList_input))
+    preview_list(shoppingList_grouped)
+
+    sendList_question = 'send list? (y/n)\n'
+    refreshList_question = 'refresh list input? (y/n)\n'
+
+    # ask user whether to push shopping list to phone
     sendList_input = input(sendList_question)
-sendList = sendList_input == "y"
+    while sendList_input not in ['y','n']:
+        print('{} is not valid input, input y or n'.format(sendList_input))
+        sendList_input = input(sendList_question)
+    sendList = ( sendList_input == "y" )
 
-if sendList:
-    checklist_filename = checklist_file_generator.generate(mealsToBuy,shoppingList_grouped)
-    print('file generated')
-    authKey = push_file.get_pb_authKey()
-    push_file.push_file(checklist_filename, authKey)
-    print('file pushed')
+    if sendList:
+        checklist_filename = checklist_file_generator.generate(mealsToBuy,shoppingList_grouped)
+        print('file generated')
+        authKey = push_file.get_pb_authKey()
+        push_file.push_file(checklist_filename, authKey)
+        print('file pushed')
+        generateList = False;
+    else:
+        refreshList_input = input(refreshList_question)
+        while refreshList_input not in ['y','n']:
+            print('{} is not valid input, input y or n'.format(refreshList_input))
+            refreshList_input = input(refreshList_question)
+        generateList = ( refreshList_input == "y" )
 
 print('exiting script')
