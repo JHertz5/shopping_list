@@ -68,17 +68,19 @@ while generateList:
     sendList = ( sendList_input == "y" )
 
     if sendList:
+        # generate checklist file
         checklist_filename = checklist_file_generator.generate(mealsToBuy,shoppingList_grouped)
         print('file generated')
-        authKey = push_file.get_pb_authKey()
-        push_file.push_file(checklist_filename, authKey)
+        # push file
+        push_file.push_file(checklist_filename)
         print('file pushed')
-        generateList = False;
+
+        generateList = False; # end script
     else:
         refreshList_input = input(refreshList_question)
         while refreshList_input not in ['y','n']:
             print('{} is not valid input, input y or n'.format(refreshList_input))
             refreshList_input = input(refreshList_question)
-        generateList = ( refreshList_input == "y" )
+        generateList = ( refreshList_input == "y" ) # rerun script if y
 
 print('exiting script')

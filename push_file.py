@@ -1,13 +1,13 @@
 from pushbullet import Pushbullet
 
-def get_pb_authKey():
+def _get_pb_authKey():
     filename = './.pb'
     with open(filename,'r') as authFile:
         authKey = authFile.read()
     return authKey.strip()
 
-def push_file(filename, authKey):
-
+def push_file(filename):
+    authKey = _get_pb_authKey()
     pb = Pushbullet(authKey) # authenticate
 
     with open(filename, 'rb') as file_to_push:
