@@ -58,32 +58,37 @@ while generateList:
 
     preview_list(shoppingList_grouped)
 
-    sendList_question = 'send list? (y/n)\n'
-    refreshList_question = 'refresh list input? (y/n)\n'
+    sendList_question = '[s]end list, [r]efresh list or [q]uit?\n'
+    sendList_responses = ['s','r','q']
 
     # ask user whether to push shopping list to phone
     sendList_input = input(sendList_question)
-    while sendList_input not in ['y','n']:
-        print('{} is not valid input, input y or n'.format(sendList_input))
+    while sendList_input not in sendList_responses:
+        print('{} is not valid input {}'.format(sendList_input, sendList_responses))
         sendList_input = input(sendList_question)
-    sendList = ( sendList_input == "y" )
+    # sendList = ( sendList_input == "y" )
 
-    if sendList:
+    if sendList_input == 's': # send file
+        print('send file selected')
+
         # generate checklist file
         checklist_filename = checklist_file_generator.generate_filename()
         checklist_file_generator.generate_file(mealsToBuy, shoppingList_grouped, checklist_filename)
         print('{} generated'.format(checklist_filename))
+
         # push file
         push_file.push_file(checklist_filename)
         print('file pushed')
-        os.remove(checklist_filename)
+
+        os.remove(checklist_filename) # delete file
 
         generateList = False; # end script
-    else:
-        refreshList_input = input(refreshList_question)
-        while refreshList_input not in ['y','n']:
-            print('{} is not valid input, input y or n'.format(refreshList_input))
-            refreshList_input = input(refreshList_question)
-        generateList = ( refreshList_input == "y" ) # rerun script if y
 
+    elif sendList_input == 'r': # refresh file
+        print('refresh file selected')
+        generateList = True; # restart script
+
+    else:
+        print('quit selected')
+        generateList = False; # end script
 print('exiting script')
