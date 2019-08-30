@@ -1,6 +1,7 @@
 import database_interface
 import checklist_file_generator
 import push_file
+import os
 
 def preview_list(shoppingList_grouped):
     # convert group setss to strings with newline seperation
@@ -69,11 +70,13 @@ while generateList:
 
     if sendList:
         # generate checklist file
-        checklist_filename = checklist_file_generator.generate(mealsToBuy,shoppingList_grouped)
-        print('file generated')
+        checklist_filename = checklist_file_generator.generate_filename()
+        checklist_file_generator.generate_file(mealsToBuy, shoppingList_grouped, checklist_filename)
+        print('{} generated'.format(checklist_filename))
         # push file
         push_file.push_file(checklist_filename)
         print('file pushed')
+        os.remove(checklist_filename)
 
         generateList = False; # end script
     else:
