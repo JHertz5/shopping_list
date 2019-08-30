@@ -1,8 +1,8 @@
 from pushbullet import Pushbullet
 
 def _get_pb_authKey():
-    filename = './.pb'
-    with open(filename,'r') as authFile:
+    key_filename = './.pb'
+    with open(key_filename,'r') as authFile:
         authKey = authFile.read()
     return authKey.strip()
 
