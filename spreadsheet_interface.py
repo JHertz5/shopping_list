@@ -20,16 +20,21 @@ def selectGrouping(groupingOptions_minusUnordered):
         for index,groupingOption in enumerate(groupingOptions):
             print('\t{}({})'.format(groupingOption,index))
 
-        groupingSelection = int(input('Pick sort method: ')) # input selection
-
+        groupingSelection = input('Pick sort method: ') # input selection
+#int
         # check validity of selection
-        if 0 < groupingSelection < len(groupingOptions):
-            inputValid = True
-        else:
-            print('input must be in range [{}-{}]'.format(0,len(groupingOptions)-1))
+        try:
+            groupingSelection_int = int(groupingSelection)
+            if 0 < groupingSelection_int < len(groupingOptions):
+                inputValid = True
+            else:
+                print('input must be in range [{}-{}]'.format(0,len(groupingOptions)-1))
+        except:
+            print('Grouping selection must be int')
 
-    print('{} selected\n'.format(groupingOptions[groupingSelection]))
-    return groupingSelection
+
+    print('{} selected\n'.format(groupingOptions[groupingSelection_int]))
+    return groupingSelection_int
 
 def getData_ItemGroup(sheets):
     # extract data from item group sheet
