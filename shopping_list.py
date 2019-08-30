@@ -1,4 +1,4 @@
-import database_interface
+import spreadsheet_interface
 import checklist_file_generator
 import push_file
 import os
@@ -16,19 +16,19 @@ def preview_list(shoppingList_grouped):
     ])
     print(preview)
 
-sheets = database_interface.openWorksheets()
+sheets = spreadsheet_interface.openWorksheets()
 print('data connected')
 
-aisleGroupItems,itemNames = database_interface.getAndProcess_ItemGroup(sheets)
+aisleGroupItems,itemNames = spreadsheet_interface.getAndProcess_ItemGroup(sheets)
 print('items retrieved')
 # extract data from recipe sheet
-recipes = database_interface.getAndProcessData_Recipes(sheets)
+recipes = spreadsheet_interface.getAndProcessData_Recipes(sheets)
 print('recipes retrieved')
 
 generateList = True
 while generateList:
     # extract data from input sheet
-    (mealsToBuy, exclusions, extras) = database_interface.getAndProcessData_Input(sheets)
+    (mealsToBuy, exclusions, extras) = spreadsheet_interface.getAndProcessData_Input(sheets)
     print('input data retrieved')
     print('data retrieved')
 
