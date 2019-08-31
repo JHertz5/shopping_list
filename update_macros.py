@@ -4,12 +4,9 @@ import sheet_interface
 
 sheets = sheet_interface.openSpreadsheet()
 
-ingredientMacrosSheet = sheets.worksheet('Items-Macros')
-mealIngredientsSheet = sheets.worksheet('Recipes')
-recipeMacrosSheet = sheets.worksheet('Recipes-Macros')
-
 
 # get ingredients data into dict of dicts
+ingredientMacrosSheet = sheets.worksheet('Items-Macros')
 ingredientMacrosRaw = ingredientMacrosSheet.get_all_records()
 ingredientMacros = {}
 for ingredient in ingredientMacrosRaw:
@@ -17,6 +14,7 @@ for ingredient in ingredientMacrosRaw:
     ingredientMacros[ingredientName] = ingredient
 
 # get meal ingredients into dict of lists
+mealIngredientsSheet = sheets.worksheet('Recipes')
 mealIngredientsRaw = mealIngredientsSheet.get_all_values()
 mealIngredients = {}
 for meal in mealIngredientsRaw:
@@ -34,15 +32,18 @@ print('data retrieved')
 mealNames = sorted(list(mealIngredients.keys()))
 
 # get cells from recipeMacrosSheet
-cellRange = 'A1:E' + str(len(mealNames)+1)
+recipeMacrosSheet = sheets.worksheet('Recipes-Macros')
+cellRange = 'A1:F' + str(len(mealNames)+1)
 cellList = recipeMacrosSheet.range(cellRange)
 
-cellList[0].value = 'Meal'
+# fill in heading names
 cellCounter = 0
-
+cellList[cellCounter].value = 'Meal'
 for index,cell in enumerate( cellList[ 1 : 1+len(macroHeadings) ]):
     cellCounter += 1
     cell.value = macroHeadings[index]
+cellCounter += 1
+cellList[cellCounter].value = 'Skipped Items'
 
 for meal in mealNames:
     # fill in name of meal
@@ -55,6 +56,11 @@ for meal in mealNames:
         ingredientMacroList = [ int(ingredientMacros[x][heading]) for x in mealIngredients[meal] if x in ingredientMacros]
         mealMacroTotal = sum(ingredientMacroList)
         cellList[cellCounter].value = mealMacroTotal
+
+    cellCounter += 1
+    skippedIngredients = [ x for x in mealIngredients[meal] if x not in ingredientMacros ]
+    cellList[cellCounter].value = ', '.join(skippedIngredients)
+
 
 print('totals calculated')
 
