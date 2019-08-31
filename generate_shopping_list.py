@@ -37,9 +37,11 @@ while generateList:
     print('data retrieved')
 
     # combine meal recipes into items list (using set to avoid duplication)
-    shoppingList = set()
+    shoppingList = []
     for meal in mealsToBuy:
         shoppingList = shoppingList.union(recipes[meal])
+
+    print(shoppingList)
 
     # removing excluded items and add extras
     shoppingList = shoppingList.difference(exclusions) # remove excluded items
