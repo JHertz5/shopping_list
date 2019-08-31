@@ -73,7 +73,7 @@ def getAndProcessData_Recipes(sheet):
     recipes = {}
     for recipe in recipesRaw:
         # create dict entry of recipe name : recipe ingredients
-        recipes[recipe[0]] = [x for x in recipe if x != '']
+        recipes[recipe[0]] = [x for x in recipe[1:] if x != '']
     return recipes
 
 def getAndProcessData_Input(sheet):
