@@ -1,7 +1,7 @@
-import spreadsheet_interface
+import sheet_interface
 import checklist_file_generator
 import push_file
-import os
+import os # for deleting file
 
 def preview_list(shoppingList_grouped):
     # convert group setss to strings with newline seperation
@@ -16,19 +16,23 @@ def preview_list(shoppingList_grouped):
     ])
     print(preview)
 
-sheets = spreadsheet_interface.openWorksheets()
+sheets = sheet_interface.openSpreadsheet()
 print('data connected')
 
-aisleGroupItems,itemNames = spreadsheet_interface.getAndProcess_ItemGroup(sheets)
+items_sheet = sheets.worksheet('Items')
+aisleGroupItems,itemNames = sheet_interface.getAndProcess_ItemGroup(items_sheet)
 print('items retrieved')
+
 # extract data from recipe sheet
-recipes = spreadsheet_interface.getAndProcessData_Recipes(sheets)
+recipes_sheet = sheets.worksheet('Recipes')
+recipes = sheet_interface.getAndProcessData_Recipes(recipes_sheet)
 print('recipes retrieved')
 
 generateList = True
 while generateList:
     # extract data from input sheet
-    (mealsToBuy, exclusions, extras) = spreadsheet_interface.getAndProcessData_Input(sheets)
+    input_sheet = sheets.worksheet('Input')
+    (mealsToBuy, exclusions, extras) = sheet_interface.getAndProcessData_Input(input_sheet)
     print('input data retrieved')
     print('data retrieved')
 
