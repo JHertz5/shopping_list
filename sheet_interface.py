@@ -11,21 +11,21 @@ def openSpreadsheet():
     # Find a workbook by name and open sheets
     return client.open("Shopping List")
 
-def selectGrouping(groupingOptions_minusUnordered):
+def selectGrouping(groupingOptions_data):
 
     inputValid = False
     while not inputValid:
         # print grouping options
         print('\nsort options:')
-        groupingOptions = ['Unordered'] + groupingOptions_minusUnordered
+        groupingOptions = ['Unordered'] + groupingOptions_data
         for index,groupingOption in enumerate(groupingOptions):
             print('\t{}({})'.format(groupingOption,index))
 
-        groupingSelection = input('Pick sort method: ') # input selection
+        groupingSelection_raw = input('Pick sort method: ') # input selection
 #int
         # check validity of selection
         try:
-            groupingSelection_int = int(groupingSelection)
+            groupingSelection_int = int(groupingSelection_raw)
             if 0 < groupingSelection_int < len(groupingOptions):
                 inputValid = True
             else:
@@ -33,42 +33,29 @@ def selectGrouping(groupingOptions_minusUnordered):
         except:
             print('Grouping selection must be int')
 
-
-    print('{} selected\n'.format(groupingOptions[groupingSelection_int]))
-    return groupingSelection_int
+    grouping_selection = groupingOptions[groupingSelection_int]
+    print('{} selected\n'.format(grouping_selection))
+    return grouping_selection
 
 def getData_ItemGroup(sheet):
     # extract data from item group sheet
     itemGroupingRecords = sheet.get_all_records() # get data from sheet
 
-    groupingOptions = list(itemGroupingRecords[0].keys())[1:] # get names of grouping options
+    table_headers = list(itemGroupingRecords[0].keys())
+    items_header = table_headers[0]
+    groupingOptions = table_headers[1:] # get names of grouping options
     groupingSelection = selectGrouping(groupingOptions)
-    return itemGroupingRecords, groupingSelection
 
-def processData_ItemGroup(itemGroupingRecords, groupingSelection):
-    recordKeys = list(itemGroupingRecords[0].keys())
-    itemNamesKey = recordKeys[0]
-    groupingSelectionKey = recordKeys[groupingSelection]
+    item_groups = {}
+    for record in itemGroupingRecords:
+        if groupingSelection == 'Unordered':
+            item_groups[record[items_header]] = 0
+        else:
+            item_groups[record[items_header]] = record[groupingSelection]
 
-    # extract data into lists
-    itemNames = [x[itemNamesKey] for x in itemGroupingRecords]
-    if groupingSelection == 0: # if unordered
-        aisleGroups = [1]*len(itemNames) # equal aisleGroup for every item
-    else:
-        # convert group values into list of ints
-        aisleGroups = [x[groupingSelectionKey] for x in itemGroupingRecords]
+    return item_groups
 
-    # arrange data into list of sets
-    aisleGroupItems = {x:set() for x in set(aisleGroups)}
-    for (aisleGroup,itemName) in zip(aisleGroups,itemNames):
-        aisleGroupItems[aisleGroup].add(itemName)
-    return aisleGroupItems, itemNames
-
-def getAndProcess_ItemGroup(sheet):
-    itemGroupingRecords, groupingSelection = getData_ItemGroup(sheet)
-    return processData_ItemGroup(itemGroupingRecords, groupingSelection)
-
-def getAndProcessData_Recipes(sheet):
+def getData_Recipes(sheet):
     recipesRaw = sheet.get_all_values()
     recipes = {}
     for recipe in recipesRaw:
@@ -76,7 +63,7 @@ def getAndProcessData_Recipes(sheet):
         recipes[recipe[0]] = [x for x in recipe[1:] if x != '']
     return recipes
 
-def getAndProcessData_Input(sheet):
+def getData_Input(sheet):
     inputRaw = sheet.get_all_values()
     # process each input set
     inputSets = []

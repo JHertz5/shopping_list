@@ -1,85 +1,63 @@
 import sheet_interface
+import shopping_list_manager
 import checklist_file_generator
 import push_file
 import os # for deleting file
-
-def preview_list(shoppingList_grouped):
-    # convert group setss to strings with newline seperation
-    shoppingList_stringList = ['\n'.join(x) for x in shoppingList_grouped]
-
-    preview = '\n'.join([
-    '\nMeals:\n',
-    '\n'.join(mealsToBuy),
-    '\nItems:\n',
-    '\n\n'.join(shoppingList_stringList),
-    '\n'
-    ])
-    print(preview)
 
 sheets = sheet_interface.openSpreadsheet()
 print('data connected')
 
 items_sheet = sheets.worksheet('Items')
-aisleGroupItems,itemNames = sheet_interface.getAndProcess_ItemGroup(items_sheet)
+item_groups = sheet_interface.getData_ItemGroup(items_sheet)
 print('items retrieved')
 
 # extract data from recipe sheet
 recipes_sheet = sheets.worksheet('Recipes')
-recipes = sheet_interface.getAndProcessData_Recipes(recipes_sheet)
+recipes = sheet_interface.getData_Recipes(recipes_sheet)
 print('recipes retrieved')
 
 generateList = True
 while generateList:
     # extract data from input sheet
     input_sheet = sheets.worksheet('Input')
-    (mealsToBuy, exclusions, extras) = sheet_interface.getAndProcessData_Input(input_sheet)
+    (mealsToBuy, exclusions, inclusions) = sheet_interface.getData_Input(input_sheet)
     print('input data retrieved')
     print('data retrieved')
 
-    # combine meal recipes into items list (using set to avoid duplication)
-    shoppingList = []
-    for meal in mealsToBuy:
-        shoppingList = shoppingList.union(recipes[meal])
+    # create subset of recipes containing only recipes to go in shopping list
+    recipes_to_buy = { x:recipes[x] for x in recipes.keys() if x in mealsToBuy }
 
-    print(shoppingList)
+    shopping_list = shopping_list_manager.ShoppingList()
+    for recipe_name, ingredients in recipes_to_buy.items():
+        shopping_list.add_recipe(recipe_name, ingredients)
 
-    # removing excluded items and add extras
-    shoppingList = shoppingList.difference(exclusions) # remove excluded items
-    shoppingList = shoppingList.union(extras)
+    # inclusions overrides exclusions
+    excluded_items = exclusions.difference(inclusions)
+    shopping_list.exclude_items(excluded_items)
 
-    # create shoppingList_grouped, dict[aisle number] = item list
-    aisleGroupList = sorted(aisleGroupItems.keys())
-    shoppingList_grouped = [
-        aisleGroupItems[x].intersection(shoppingList) for x in aisleGroupList
-        ]
-    # remove empty groups from shoppingList_grouped
-    shoppingList_grouped = [x for x in shoppingList_grouped if x != set()]
+    # assigning groups to shopping list items
+    shopping_list.set_item_groups(item_groups)
 
-    # Add any extras without item groups to group 0
-    unorderdExtras = extras.difference(itemNames)
-    if len(unorderdExtras) > 0:
-        shoppingList_grouped.append(unorderdExtras)
-
+    shopping_list.preview_list()
     print('shopping list generated')
-
-    preview_list(shoppingList_grouped)
 
     sendList_question = '[s]end list, [r]efresh list or [q]uit?\n'
     sendList_responses = ['s','r','q']
-
-    # ask user whether to push shopping list to phone
+    # ask user whether to push shopping list
     sendList_input = input(sendList_question)
     while sendList_input not in sendList_responses:
         print('{} is not valid input {}'.format(sendList_input, sendList_responses))
         sendList_input = input(sendList_question)
-    # sendList = ( sendList_input == "y" )
 
     if sendList_input == 's': # send file
         print('send file selected')
 
+        # generate grouped list
+        shopping_list_grouped = shopping_list.generate_grouped_list()
+
         # generate checklist file
         checklist_filename = checklist_file_generator.generate_filename()
-        checklist_file_generator.generate_file(mealsToBuy, shoppingList_grouped, checklist_filename)
+        checklist_file_generator.generate_file(shopping_list_grouped, checklist_filename)
         print('{} generated'.format(checklist_filename))
 
         # push file
