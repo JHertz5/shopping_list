@@ -4,28 +4,28 @@ import checklist_file_generator
 import push_file
 import os # for deleting file
 
-sheets = sheet_interface.openSpreadsheet()
+sheets = sheet_interface.open_spreadsheet()
 print('data connected')
 
 items_sheet = sheets.worksheet('Items')
-item_groups = sheet_interface.getData_ItemGroup(items_sheet)
+item_groups = sheet_interface.get_data_item_group(items_sheet)
 print('items retrieved')
 
 # extract data from recipe sheet
 recipes_sheet = sheets.worksheet('Recipes')
-recipes = sheet_interface.getData_Recipes(recipes_sheet)
+recipes = sheet_interface.get_data_recipes(recipes_sheet)
 print('recipes retrieved')
 
-generateList = True
-while generateList:
+generate_list = True
+while generate_list:
     # extract data from input sheet
     input_sheet = sheets.worksheet('Input')
-    (mealsToBuy, exclusions, inclusions) = sheet_interface.getData_Input(input_sheet)
+    (meals_to_buy, exclusions, inclusions) = sheet_interface.get_data_input(input_sheet)
     print('input data retrieved')
     print('data retrieved')
 
     # create subset of recipes containing only recipes to go in shopping list
-    recipes_to_buy = { x:recipes[x] for x in recipes.keys() if x in mealsToBuy }
+    recipes_to_buy = { x:recipes[x] for x in recipes.keys() if x in meals_to_buy }
 
     shopping_list = shopping_list_manager.ShoppingList()
     for recipe_name, ingredients in recipes_to_buy.items():
@@ -41,15 +41,15 @@ while generateList:
     shopping_list.preview_list()
     print('shopping list generated')
 
-    sendList_question = '[s]end list, [r]efresh list or [q]uit?\n'
-    sendList_responses = ['s','r','q']
+    send_list_question = '[s]end list, [r]efresh list or [q]uit?\n'
+    send_list_responses = ['s','r','q']
     # ask user whether to push shopping list
-    sendList_input = input(sendList_question)
-    while sendList_input not in sendList_responses:
-        print('{} is not valid input {}'.format(sendList_input, sendList_responses))
-        sendList_input = input(sendList_question)
+    send_list_input = input(send_list_question)
+    while send_list_input not in send_list_responses:
+        print('{} is not valid input {}'.format(send_list_input, send_list_responses))
+        send_list_input = input(send_list_question)
 
-    if sendList_input == 's': # send file
+    if send_list_input == 's': # send file
         print('send file selected')
 
         # generate grouped list
@@ -66,13 +66,13 @@ while generateList:
 
         os.remove(checklist_filename) # delete file
 
-        generateList = False; # end script
+        generate_list = False; # end script
 
-    elif sendList_input == 'r': # refresh file
+    elif send_list_input == 'r': # refresh file
         print('refresh file selected')
-        generateList = True; # restart script
+        generate_list = True; # restart script
 
     else:
         print('quit selected')
-        generateList = False; # end script
+        generate_list = False; # end script
 print('exiting script')

@@ -1,7 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-def openSpreadsheet():
+def open_spreadsheet():
     #use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     #TODO put filename in config file
@@ -11,60 +11,59 @@ def openSpreadsheet():
     # Find a workbook by name and open sheets
     return client.open("Shopping List")
 
-def selectGrouping(groupingOptions_data):
+def select_grouping(grouping_options_data):
 
-    inputValid = False
-    while not inputValid:
+    input_valid = False
+    while not input_valid:
         # print grouping options
         print('\nsort options:')
-        groupingOptions = ['Unordered'] + groupingOptions_data
-        for index,groupingOption in enumerate(groupingOptions):
-            print('\t{}({})'.format(groupingOption,index))
+        grouping_options = ['Unordered'] + grouping_options_data
+        for index,grouping_option in enumerate(grouping_options):
+            print('\t{}({})'.format(grouping_option,index))
 
-        groupingSelection_raw = input('Pick sort method: ') # input selection
+        grouping_selection_raw = input('Pick sort method: ') # input selection
 #int
         # check validity of selection
         try:
-            groupingSelection_int = int(groupingSelection_raw)
-            if 0 < groupingSelection_int < len(groupingOptions):
-                inputValid = True
+            grouping_selection_int = int(grouping_selection_raw)
+            if 0 < grouping_selection_int < len(grouping_options):
+                input_valid = True
             else:
-                print('input must be in range [{}-{}]'.format(0,len(groupingOptions)-1))
+                print('input must be in range [{}-{}]'.format(0,len(grouping_options)-1))
         except:
             print('Grouping selection must be int')
 
-    grouping_selection = groupingOptions[groupingSelection_int]
+    grouping_selection = grouping_options[grouping_selection_int]
     print('{} selected\n'.format(grouping_selection))
     return grouping_selection
 
-def getData_ItemGroup(sheet):
+def get_data_item_group(sheet):
     # extract data from item group sheet
-    itemGroupingRecords = sheet.get_all_records() # get data from sheet
+    item_grouping_records = sheet.get_all_records() # get data from sheet
 
-    table_headers = list(itemGroupingRecords[0].keys())
+    table_headers = list(item_grouping_records[0].keys())
     items_header = table_headers[0]
-    groupingOptions = table_headers[1:] # get names of grouping options
-    groupingSelection = selectGrouping(groupingOptions)
+    grouping_options = table_headers[1:] # get names of grouping options
+    grouping_selection = select_grouping(grouping_options)
 
     item_groups = {}
-    for record in itemGroupingRecords:
-        if groupingSelection == 'Unordered':
+    for record in item_grouping_records:
+        if grouping_selection == 'Unordered':
             item_groups[record[items_header]] = 0
         else:
-            item_groups[record[items_header]] = record[groupingSelection]
+            item_groups[record[items_header]] = record[grouping_selection]
 
     return item_groups
 
-def getData_Recipes(sheet):
-    recipesRaw = sheet.get_all_values()
+def get_data_recipes(sheet):
+    recipes_raw = sheet.get_all_values()
     recipes = {}
-    for recipe in recipesRaw:
+    for recipe in recipes_raw:
         # create dict entry of recipe name : recipe ingredients
         recipes[recipe[0]] = [x for x in recipe[1:] if x != '']
     return recipes
 
-def getData_Input(sheet):
-    inputRaw = sheet.get_all_values()
+def get_data_input(sheet):
     # process each input set
     inputSets = []
     for listIndex in range(1,4):
