@@ -3,9 +3,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 def open_spreadsheet():
     #use creds to create a client to interact with the Google Drive API
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+    scope = [
+        'https://spreadsheets.google.com/feeds',
+        'https://www.googleapis.com/auth/drive'
+        ]
     #TODO put filename in config file
-    creds = ServiceAccountCredentials.from_json_keyfile_name('Shopping List-32ab969084cf.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        'Shopping List-32ab969084cf.json', scope)
     client = gspread.authorize(creds)
 
     # Find a workbook by name and open sheets
@@ -29,7 +33,8 @@ def select_grouping(grouping_options_data):
             if 0 < grouping_selection_int < len(grouping_options):
                 input_valid = True
             else:
-                print('input must be in range [{}-{}]'.format(0,len(grouping_options)-1))
+                print('input must be in range [{}-{}]'.format(
+                    0,len(grouping_options)-1))
         except:
             print('Grouping selection must be int')
 

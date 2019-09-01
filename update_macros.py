@@ -53,12 +53,14 @@ for meal in meal_names:
     # find total of all ingredients for each heading and write to cell
     for heading in macro_headings:
         cell_counter += 1
-        ingredient_macroList = [ int(ingredient_macros[x][heading]) for x in meal_ingredients[meal] if x in ingredient_macros]
+        ingredient_macroList = [ int(ingredient_macros[x][heading])
+            for x in meal_ingredients[meal] if x in ingredient_macros]
         mealMacroTotal = sum(ingredient_macroList)
         cell_list[cell_counter].value = mealMacroTotal
 
     cell_counter += 1
-    skipped_ingredients = [ x for x in meal_ingredients[meal] if x not in ingredient_macros ]
+    skipped_ingredients = [ x for x in meal_ingredients[meal]
+        if x not in ingredient_macros ]
     cell_list[cell_counter].value = ', '.join(skipped_ingredients)
 
 

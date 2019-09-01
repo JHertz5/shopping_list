@@ -20,12 +20,14 @@ generate_list = True
 while generate_list:
     # extract data from input sheet
     input_sheet = sheets.worksheet('Input')
-    (meals_to_buy, exclusions, inclusions) = sheet_interface.get_data_input(input_sheet)
+    (meals_to_buy, exclusions, inclusions) = sheet_interface.get_data_input(
+        input_sheet)
     print('input data retrieved')
     print('data retrieved')
 
     # create subset of recipes containing only recipes to go in shopping list
-    recipes_to_buy = { x:recipes[x] for x in recipes.keys() if x in meals_to_buy }
+    recipes_to_buy = { x:recipes[x] for x in recipes.keys()
+        if x in meals_to_buy }
 
     shopping_list = shopping_list_manager.ShoppingList()
     for recipe_name, ingredients in recipes_to_buy.items():
@@ -46,7 +48,8 @@ while generate_list:
     # ask user whether to push shopping list
     send_list_input = input(send_list_question)
     while send_list_input not in send_list_responses:
-        print('{} is not valid input {}'.format(send_list_input, send_list_responses))
+        print('{} is not valid input {}'.format(
+            send_list_input, send_list_responses))
         send_list_input = input(send_list_question)
 
     if send_list_input == 's': # send file
@@ -57,7 +60,8 @@ while generate_list:
 
         # generate checklist file
         checklist_filename = checklist_file_generator.generate_filename()
-        checklist_file_generator.generate_file(shopping_list_grouped, checklist_filename)
+        checklist_file_generator.generate_file(
+            shopping_list_grouped, checklist_filename)
         print('{} generated'.format(checklist_filename))
 
         # push file
