@@ -36,6 +36,7 @@ while generate_list:
     # inclusions overrides exclusions
     excluded_items = exclusions.difference(inclusions)
     shopping_list.exclude_items(excluded_items)
+    shopping_list.include_items(inclusions)
 
     # assigning groups to shopping list items
     shopping_list.set_item_groups(item_groups)

@@ -15,6 +15,12 @@ def generate_file(shopping_list_grouped, filename):
             line = generate_checklist_line(recipe,'recipes')
             checklist_file.write(line)
 
+        # add unknown groups to file
+        groups.remove('unknown')
+        for item in shopping_list_grouped['unknown']:
+            line = generate_checklist_line(item['name'],'none')
+            checklist_file.write(line)
+
         # add items to the file
         for group_idx,group in enumerate(groups):
             for item in shopping_list_grouped[group]:
@@ -22,5 +28,9 @@ def generate_file(shopping_list_grouped, filename):
                 line = generate_checklist_line(entry, str(group_idx))
                 checklist_file.write(line)
 
+# TODO function to write whole group in default format and remove from list
+
+# TODO write line in function
 def generate_checklist_line(text,group):
-    return text + " @" + group + '\n'
+    line = text + " @" + group + '\n'
+    return line

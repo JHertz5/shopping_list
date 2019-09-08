@@ -25,9 +25,20 @@ class ShoppingList:
             # use pop to avoid errors when item is not on list
             self.items.pop(item, None)
 
+    def include_items(self, included_items):
+        current_items = self.items.keys()
+        new_items = included_items.difference(current_items)
+
+        for item in new_items:
+            self.add_item(item)
+
     def set_item_groups(self, item_groups):
+        group_known_items = item_groups.keys()
         for item in self.items.keys():
-            self.items[item]['group'] = item_groups[item]
+            if item in group_known_items:
+                self.items[item]['group'] = item_groups[item]
+            else:
+                self.items[item]['group'] = 'unknown'
 
     def generate_grouped_list(self):
         grouped_list = {}
