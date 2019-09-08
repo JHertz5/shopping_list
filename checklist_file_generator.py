@@ -16,10 +16,10 @@ def generate_file(shopping_list_grouped, filename):
             checklist_file.write(line)
 
         # add items to the file
-        for group in groups:
+        for group_idx,group in enumerate(groups):
             for item in shopping_list_grouped[group]:
                 entry = '{} ({})'.format(item['name'], item['num_portions'])
-                line = generate_checklist_line(entry, str(group))
+                line = generate_checklist_line(entry, str(group_idx))
                 checklist_file.write(line)
 
 def generate_checklist_line(text,group):
