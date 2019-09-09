@@ -1,36 +1,35 @@
 from datetime import datetime
 
-def generate_filename():
-    filename_base = "shoppinglist_"
-    filename_tag  = datetime.now().strftime('%Y%m%d%H%M%S')
-    return filename_base + filename_tag
+class checklist_manager:
 
-def generate_file(shopping_list_grouped, filename):
-    with open(filename,'w') as checklist_file:
+    def __init__(self):
+        # generate filename
+        now = datetime.now()
+        self.filename = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S')
+
+        self.file = open(self.filename,'w')
+
+    def generate_file(self, shopping_list_grouped):
         groups = list(shopping_list_grouped.keys())
 
         # add recipes to file
         groups.remove('recipes')
         for recipe in shopping_list_grouped['recipes']:
-            line = generate_checklist_line(recipe,'recipes')
-            checklist_file.write(line)
+            self.add_line(recipe,'recipes')
 
         # add unknown groups to file
         groups.remove('unknown')
         for item in shopping_list_grouped['unknown']:
-            line = generate_checklist_line(item['name'],'none')
-            checklist_file.write(line)
+            self.add_line(item['name'],'none')
 
         # add items to the file
         for group_idx,group in enumerate(groups):
             for item in shopping_list_grouped[group]:
                 entry = '{} ({})'.format(item['name'], item['num_portions'])
-                line = generate_checklist_line(entry, str(group_idx))
-                checklist_file.write(line)
+                self.add_line(entry, str(group_idx))
 
-# TODO function to write whole group in default format and remove from list
+        self.file.close()
 
-# TODO write line in function
-def generate_checklist_line(text,group):
-    line = text + " @" + group + '\n'
-    return line
+    def add_line(self, text, group):
+        line = text + " @" + group + '\n'
+        self.file.write(line)

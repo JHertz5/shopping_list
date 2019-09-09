@@ -60,9 +60,9 @@ while generate_list:
         shopping_list_grouped = shopping_list.generate_grouped_list()
 
         # generate checklist file
-        checklist_filename = checklist_file_generator.generate_filename()
-        checklist_file_generator.generate_file(
-            shopping_list_grouped, checklist_filename)
+        checklist_generator = checklist_file_generator.checklist_manager()
+        checklist_generator.generate_file(shopping_list_grouped)
+        checklist_filename = checklist_generator.filename
         print('{} generated'.format(checklist_filename))
 
         # push file
