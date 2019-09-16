@@ -5,7 +5,7 @@ class checklist_manager:
     def __init__(self):
         # generate filename
         now = datetime.now()
-        self.filename = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S')
+        self.filename = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S') + ".txt"
 
         self.file = open(self.filename,'w')
 
