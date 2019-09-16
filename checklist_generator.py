@@ -13,14 +13,16 @@ class checklist_manager:
         groups = list(shopping_list_grouped.keys())
 
         # add recipes to file
-        groups.remove('recipes')
-        for recipe in shopping_list_grouped['recipes']:
-            self.add_line(recipe,'recipes')
+        if 'recipes' in groups.keys():
+            groups.remove('recipes')
+            for recipe in shopping_list_grouped['recipes']:
+                self.add_line(recipe,'recipes')
 
         # add unknown groups to file
-        groups.remove('unknown')
-        for item in shopping_list_grouped['unknown']:
-            self.add_line(item['name'],'none')
+        if 'unknown' in groups.keys():
+            groups.remove('unknown')
+            for item in shopping_list_grouped['unknown']:
+                self.add_line(item['name'],'none')
 
         # add items to the file
         for group_idx,group in enumerate(groups):
