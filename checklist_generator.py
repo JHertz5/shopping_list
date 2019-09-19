@@ -25,7 +25,7 @@ class checklist_manager:
                 self.add_line(item['name'],'none')
 
         # add items to the file
-        for group_idx,group in enumerate(groups):
+        for group_idx,group in enumerate(sorted(groups)):
             for item in shopping_list_grouped[group]:
                 entry = '{} ({})'.format(item['name'], item['num_portions'])
                 self.add_line(entry, str(group_idx))
