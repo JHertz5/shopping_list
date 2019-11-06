@@ -61,7 +61,6 @@ class ShoppingList:
         return grouped_list
 
     def preview_list(self):
-        #TODO group up first
         # convert group setss to strings with newline seperation
         item_strings = ['{} ({})'.format(x,self.items[x]['num_portions'])
             for x in self.items.keys()]

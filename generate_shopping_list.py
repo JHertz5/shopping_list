@@ -20,18 +20,19 @@ generate_list = True
 while generate_list:
     # extract data from input sheet
     input_sheet = sheets.worksheet('Input')
-    (meals_to_buy, exclusions, inclusions) = sheet_interface.get_data_input(
-        input_sheet)
+    (meals_to_buy, exclusions_list, inclusions_list) = sheet_interface.get_data_input(input_sheet)
+    exclusions = set(exclusions_list)
+    inclusions = set(inclusions_list)
     print('input data retrieved')
     print('data retrieved')
 
-    # create subset of recipes containing only recipes to go in shopping list
-    recipes_to_buy = { x:recipes[x] for x in recipes.keys()
-        if x in meals_to_buy }
+    # create list of recipes containing only recipes to go in shopping list
+    recipes_to_buy = [ recipes[x] for x in meals_to_buy ]
 
+    # instantiate shopping list and add recipes
     shopping_list = shopping_list_manager.ShoppingList()
-    for recipe_name, ingredients in recipes_to_buy.items():
-        shopping_list.add_recipe(recipe_name, ingredients)
+    for recipe, ingredients in zip(meals_to_buy,recipes_to_buy):
+        shopping_list.add_recipe(recipe, ingredients)
 
     # inclusions overrides exclusions
     excluded_items = exclusions.difference(inclusions)
