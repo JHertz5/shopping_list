@@ -1,6 +1,6 @@
 import sheet_interface
 import shopping_list_manager
-import checklist_generator
+import checklist_manager
 import push_file
 import os # for deleting file
 
@@ -61,7 +61,7 @@ while generate_list:
         shopping_list_grouped = shopping_list.generate_grouped_list()
 
         # generate checklist file
-        checklist = checklist_generator.checklist_manager()
+        checklist = checklist_manager.checklist_manager()
         checklist.generate_file(shopping_list_grouped)
         checklist_filename = checklist.filename
         print('{} generated'.format(checklist_filename))
