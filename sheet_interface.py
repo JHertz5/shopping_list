@@ -15,33 +15,6 @@ def open_spreadsheet():
     # Find a workbook by name and open sheets
     return client.open("Shopping List")
 
-def select_grouping(grouping_options_data):
-
-    input_valid = False
-    while not input_valid:
-        # print grouping options
-        print('\nsort options:')
-        grouping_options = ['Unordered'] + grouping_options_data
-        for index,grouping_option in enumerate(grouping_options):
-            print('\t{}({})'.format(grouping_option,index))
-
-        grouping_selection_raw = input('Pick sort method: ') # input selection
-#int
-        # check validity of selection
-        try:
-            grouping_selection_int = int(grouping_selection_raw)
-            if 0 < grouping_selection_int < len(grouping_options):
-                input_valid = True
-            else:
-                print('input must be in range [{}-{}]'.format(
-                    0,len(grouping_options)-1))
-        except:
-            print('Grouping selection must be int')
-
-    grouping_selection = grouping_options[grouping_selection_int]
-    print('{} selected\n'.format(grouping_selection))
-    return grouping_selection
-
 def get_data_item_group(sheet):
     # extract data from item group sheet
     item_grouping_records = sheet.get_all_records() # get data from sheet
@@ -49,7 +22,32 @@ def get_data_item_group(sheet):
     table_headers = list(item_grouping_records[0].keys())
     items_header = table_headers[0]
     grouping_options = table_headers[1:] # get names of grouping options
-    grouping_selection = select_grouping(grouping_options)
+
+    # get user to select grouping
+    input_valid = False
+    while not input_valid:
+        # print grouping options
+        print('\nsort options:')
+        grouping_options = ['Unordered'] + grouping_options
+        for index,grouping_option in enumerate(grouping_options):
+            print('\t{}({})'.format(grouping_option,index))
+
+        grouping_selection_raw = input('pick sort method: ')
+        # check validity of selection
+        try:
+            grouping_selection_int = int(grouping_selection_raw)
+            if 0 <= grouping_selection_int < len(grouping_options):
+                input_valid = True
+            else:
+                print('input must be in range [{}-{}]'.format(
+                        0, len(grouping_options)-1)
+                    )
+        except:
+            print('grouping selection must be int')
+
+    # convert result from int to string to use as key
+    grouping_selection = grouping_options[grouping_selection_int]
+    print('{} selected\n'.format(grouping_selection))
 
     item_groups = {}
     for record in item_grouping_records:
