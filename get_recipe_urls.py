@@ -52,7 +52,7 @@ def get_recipe_urls():
     else:
         print('{} -> {}'.format(recipe_selection,recipe_url))
 
-        option_question = '[o]pen url or [q]uit?\n'
+        option_question = '[o]pen url or [q]uit?: '
         option_responses = ['o','q']
         # ask user whether to open url or quit
         option_input = input(option_question)
@@ -61,10 +61,10 @@ def get_recipe_urls():
             option_input = input(option_question)
 
         if option_input == 'o': # open url
-            print('open url selected')
+            print('\topen url selected')
             webbrowser.open(recipe_url,new=2)
         else:
-            print('quit selected')
+            print('\tquit selected')
 
 if __name__ == "__main__":
     get_recipe_urls()

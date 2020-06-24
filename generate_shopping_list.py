@@ -48,7 +48,7 @@ def generate_shopping_list():
         shopping_list.preview_list()
         print('shopping list generated')
 
-        send_list_question = '[s]end list, [r]efresh list or [q]uit?\n'
+        send_list_question = '[s]end list, [r]efresh list or [q]uit?: '
         send_list_responses = ['s','r','q']
         # ask user whether to push shopping list
         send_list_input = input(send_list_question)
@@ -58,7 +58,7 @@ def generate_shopping_list():
             send_list_input = input(send_list_question)
 
         if send_list_input == 's': # send file
-            print('send file selected')
+            print('\tsend file selected')
 
             # generate grouped list
             shopping_list_grouped = shopping_list.generate_grouped_list()
@@ -67,22 +67,22 @@ def generate_shopping_list():
             checklist = checklist_manager.checklist_manager()
             checklist.generate_file(shopping_list_grouped)
             checklist_filename = checklist.filename
-            print('{} generated'.format(checklist_filename))
+            print('\t{} generated'.format(checklist_filename))
 
             # push file
             push_file.push_file(checklist_filename)
-            print('file pushed')
+            print('\tfile pushed')
 
             os.remove(checklist_filename) # delete file
 
             generate_list = False; # end script
 
         elif send_list_input == 'r': # refresh file
-            print('refresh file selected')
+            print('\trefresh file selected')
             generate_list = True; # restart script
 
         else:
-            print('quit selected')
+            print('\tquit selected')
             generate_list = False; # end script
 
 if __name__ == "__main__":
