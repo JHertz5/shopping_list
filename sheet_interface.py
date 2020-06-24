@@ -1,3 +1,4 @@
+import re
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -47,7 +48,7 @@ def get_data_item_group(sheet):
 
     # convert result from int to string to use as key
     grouping_selection = grouping_options[grouping_selection_int]
-    print('{} selected\n'.format(grouping_selection))
+    print('\t{} selected\n'.format(grouping_selection))
 
     item_groups = {}
     for record in item_grouping_records:
@@ -57,6 +58,23 @@ def get_data_item_group(sheet):
             item_groups[record[items_header]] = record[grouping_selection]
 
     return item_groups
+
+def get_data_recipe_headers(sheet):
+    recipe_headers_raw = sheet.col_values(1, value_render_option='FORMULA')
+    recipe_url_dict = {}
+    for recipe_formula in recipe_headers_raw:
+        if "HYPERLINK" in recipe_formula:
+            # parse url and recipe from google sheets HYPERLINK formula format
+            match_result = re.match(r'.*\("(.*)","(.*)"\)', recipe_formula)
+            recipe_url = match_result.group(1)
+            recipe_name  = match_result.group(2)
+        else:
+            # no url in cell, treat as plaintext name
+            recipe_name = recipe_formula
+            recipe_url  = ""
+        # create dict entry of recipe name:recipe url
+        recipe_url_dict[recipe_name] = recipe_url
+    return recipe_url_dict
 
 def get_data_recipes(sheet):
     recipes_raw = sheet.get_all_values()
