@@ -29,7 +29,7 @@ def main(user_input):
         print_help_message(options_dict)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 0:
+    if len(sys.argv) > 1:
         user_input = sys.argv[1]
     else:
         user_input = ""
