@@ -1,4 +1,5 @@
-import re
+''' sheet interface functions shared between other files '''
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -16,71 +17,6 @@ def open_spreadsheet():
     # Find a workbook by name and open sheets
     return client.open("Shopping List")
 
-def get_data_items_list(sheet):
-    # extract data from item group sheet
-    item_list = sheet.col_values(1)[1:] # get item column data excluding header
-    return(item_list)
-
-def get_data_item_group(sheet):
-    # extract data from item group sheet
-    item_grouping_records = sheet.get_all_records() # get data from sheet
-
-    table_headers = list(item_grouping_records[0].keys())
-    items_header = table_headers[0]
-    grouping_options = table_headers[1:] # get names of grouping options
-
-    # get user to select grouping
-    input_valid = False
-    while not input_valid:
-        # print grouping options
-        print('\nsort options:')
-        grouping_options = ['Unordered'] + grouping_options
-        for index,grouping_option in enumerate(grouping_options):
-            print('\t{}({})'.format(grouping_option,index))
-
-        grouping_selection_raw = input('pick sort method: ')
-        # check validity of selection
-        try:
-            grouping_selection_int = int(grouping_selection_raw)
-            if 0 <= grouping_selection_int < len(grouping_options):
-                input_valid = True
-            else:
-                print('input must be in range [{}-{}]'.format(
-                        0, len(grouping_options)-1)
-                    )
-        except:
-            print('grouping selection must be int')
-
-    # convert result from int to string to use as key
-    grouping_selection = grouping_options[grouping_selection_int]
-    print('\t{} selected\n'.format(grouping_selection))
-
-    item_groups = {}
-    for record in item_grouping_records:
-        if grouping_selection == 'Unordered':
-            item_groups[record[items_header]] = 0
-        else:
-            item_groups[record[items_header]] = record[grouping_selection]
-
-    return item_groups
-
-def get_data_recipe_headers(sheet):
-    recipe_headers_raw = sheet.col_values(1, value_render_option='FORMULA')
-    recipe_url_dict = {}
-    for recipe_formula in recipe_headers_raw:
-        if "HYPERLINK" in recipe_formula:
-            # parse url and recipe from google sheets HYPERLINK formula format
-            match_result = re.match(r'.*\("(.*)","(.*)"\)', recipe_formula)
-            recipe_url = match_result.group(1)
-            recipe_name  = match_result.group(2)
-        else:
-            # no url in cell, treat as plaintext name
-            recipe_name = recipe_formula
-            recipe_url  = ""
-        # create dict entry of recipe name:recipe url
-        recipe_url_dict[recipe_name] = recipe_url
-    return recipe_url_dict
-
 def get_data_recipes(sheet):
     recipes_raw = sheet.get_all_values()
     recipes = {}
@@ -88,14 +24,3 @@ def get_data_recipes(sheet):
         # create dict entry of recipe name : recipe ingredients
         recipes[recipe[0]] = [x for x in recipe[1:] if x != '']
     return recipes
-
-def get_data_input(sheet):
-    # process each input set
-    inputSets = []
-    for listIndex in range(1,4):
-        # pull column data into list
-        columnData = sheet.col_values(listIndex)[1:]
-        # columnData.remove('') # remove any empty strings
-        inputSets.append(columnData)
-
-    return inputSets #(mealsToBuy, exclusions, extras)

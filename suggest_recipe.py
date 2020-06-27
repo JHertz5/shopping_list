@@ -2,6 +2,11 @@
 
 import sheet_interface
 
+def get_data_items_list(sheet):
+    # extract data from item group sheet
+    item_list = sheet.col_values(1)[1:] # get item column data excluding header
+    return(item_list)
+
 def recipe_search(item_list, recipes):
     # get item to search for from user input
     input_recognised = False
@@ -61,7 +66,7 @@ def suggest_recipe():
 
     # extract data from recipe sheet
     items_sheet = sheets.worksheet('Items')
-    item_list = sheet_interface.get_data_items_list(items_sheet)
+    item_list = get_data_items_list(items_sheet)
     print('items retrieved')
 
     # extract data from recipe sheet
