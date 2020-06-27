@@ -16,6 +16,11 @@ def open_spreadsheet():
     # Find a workbook by name and open sheets
     return client.open("Shopping List")
 
+def get_data_items_list(sheet):
+    # extract data from item group sheet
+    item_list = sheet.col_values(1)[1:] # get item column data excluding header
+    return(item_list)
+
 def get_data_item_group(sheet):
     # extract data from item group sheet
     item_grouping_records = sheet.get_all_records() # get data from sheet

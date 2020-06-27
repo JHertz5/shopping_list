@@ -4,6 +4,7 @@ import sys
 import generate_shopping_list
 import get_recipe_urls
 import update_macros
+import suggest_recipe
 
 def print_help_message(options_dict):
     help_string = "usage: jeffrey.py "
@@ -13,9 +14,10 @@ def print_help_message(options_dict):
 
 def main(user_input):
     options_dict = {
-        'generate_list' : ['-g', '--generate_list'],
-        'recipe_url'    : ['-r', '--recipe_url'],
-        'update_macros' : ['-u', '--update_macros']
+        'generate_list'  : ['-g', '--generate_list'],
+        'recipe_url'     : ['-r', '--recipe_url'],
+        'update_macros'  : ['-u', '--update_macros'],
+        'suggest_recipe' : ['-s', '--suggest_recipe']
     }
 
     if user_input in options_dict['generate_list']:
@@ -24,6 +26,8 @@ def main(user_input):
         get_recipe_urls.get_recipe_urls()
     elif user_input in options_dict['update_macros']:
         update_macros.update_macros()
+    elif user_input in options_dict['suggest_recipe']:
+        suggest_recipe.suggest_recipe()
     else:
         print('unknown option: {}'.format(user_input))
         print_help_message(options_dict)
