@@ -55,8 +55,8 @@ def get_data_input(sheet):
         # pull column data into list
         column         = sheet.col_values(column_index)
         column_heading = column[0]
-        column_data    = set(column[1:])
-        column_data.discard('') # remove any empty strings
+         # remove any empty strings with list comprehension
+        column_data    = [x for x in column[1:] if x]
         input_data_dict[column_heading] = column_data
 
     return input_data_dict
@@ -79,8 +79,8 @@ def generate_shopping_list():
         # extract data from input sheet
         input_sheet     = sheets.worksheet('Input')
         input_data_dict = get_data_input(input_sheet)
-        exclusions      = input_data_dict['Exclusions']
-        inclusions      = input_data_dict['Inclusions']
+        exclusions      = set(input_data_dict['Exclusions'])
+        inclusions      = set(input_data_dict['Inclusions'])
         meals_to_buy    = input_data_dict['Meals To Buy']
         print('input data retrieved')
         print('data retrieved')
