@@ -127,17 +127,17 @@ def generate_shopping_list():
 
                 os.remove(checklist_filename) # delete file
 
-                generate_list = False; # end script
+                generate_list = False # end script
 
             elif send_list_input == 'r': # refresh file
                 input_valid = True
                 print('\trefresh file selected')
-                generate_list = True; # restart script
+                generate_list = True # restart script
 
             elif send_list_input == 'q': # quit
                 input_valid = True
                 print('\tquit selected')
-                generate_list = False; # end script
+                generate_list = False # end script
             else:
                 print('{} is not valid input'.format(send_list_input))
 
