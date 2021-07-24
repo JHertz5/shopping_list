@@ -14,10 +14,11 @@ def print_help_message(options_dict):
 
 def main(user_input):
     options_dict = {
-        'generate_list'  : ['-g', '--generate_list'],
+        'generate_list'  : ['-g', '--generate_list', ''],
         'recipe_url'     : ['-r', '--recipe_url'],
         'update_macros'  : ['-u', '--update_macros'],
-        'suggest_recipe' : ['-s', '--suggest_recipe']
+        'suggest_recipe' : ['-s', '--suggest_recipe'],
+        'help'           : ['-h', '--help']
     }
 
     if user_input in options_dict['generate_list']:

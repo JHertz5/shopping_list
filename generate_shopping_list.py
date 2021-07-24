@@ -65,6 +65,7 @@ def generate_shopping_list():
     sheets = sheet_interface.open_spreadsheet()
     print('data connected')
 
+    # extract data from items sheet
     items_sheet = sheets.worksheet('Items')
     item_groups = get_data_item_group(items_sheet)
     print('items retrieved')
