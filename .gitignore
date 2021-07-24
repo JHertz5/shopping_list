@@ -1,4 +1,5 @@
 .pb
 *.json
 *.db
+*.pyc
 /__pycache*
