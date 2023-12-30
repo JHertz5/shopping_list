@@ -9,10 +9,10 @@ from . import get_recipe_urls
 from . import suggest_recipe
 
 def print_help_message(options_dict):
-    help_string = "usage: jeffrey.py "
-    for key in options_dict.keys():
-        help_string += "[" + " | ".join(options_dict[key]) + "] "
-    print(help_string)
+    help_string = "usage: " + __package__ + " "
+    options_strings = ["[" + " | ".join(options_dict[key]) + "] " for key in options_dict.keys()]
+    print(help_string + "".join(options_strings))
+
 
 def main():
 
@@ -35,6 +35,8 @@ def main():
         get_recipe_urls.get_recipe_urls()
     elif user_input in options_dict['suggest_recipe']:
         suggest_recipe.suggest_recipe()
+    elif user_input in options_dict['help']:
+        print_help_message(options_dict)
     else:
         print('unknown option: {}'.format(user_input))
         print_help_message(options_dict)
