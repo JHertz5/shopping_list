@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+
 ''' main script for user interface '''
 
 import sys
-import generate_shopping_list
-import get_recipe_urls
-import update_macros
-import suggest_recipe
+
+from . import generate_shopping_list
+from . import get_recipe_urls
+from . import update_macros
+from . import suggest_recipe
 
 def print_help_message(options_dict):
     help_string = "usage: jeffrey.py "
@@ -12,7 +15,14 @@ def print_help_message(options_dict):
         help_string += "[" + " | ".join(options_dict[key]) + "] "
     print(help_string)
 
-def main(user_input):
+def main():
+
+    # Get user input.
+    if len(sys.argv) > 1:
+        user_input = sys.argv[1]
+    else:
+        user_input = ""
+
     options_dict = {
         'generate_list'  : ['-g', '--generate_list', ''],
         'recipe_url'     : ['-r', '--recipe_url'],
@@ -34,8 +44,4 @@ def main(user_input):
         print_help_message(options_dict)
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        user_input = sys.argv[1]
-    else:
-        user_input = ""
-    main(user_input)
+    main()

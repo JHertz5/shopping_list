@@ -1,6 +1,6 @@
 ''' function to calculate macros in each recipe '''
 
-import sheet_interface
+from . import sheet_interface
 
 def update_macros():
     sheets = sheet_interface.open_spreadsheet()

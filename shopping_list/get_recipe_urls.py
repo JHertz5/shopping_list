@@ -4,7 +4,8 @@
 
 import re
 import webbrowser
-import sheet_interface
+
+from . import sheet_interface
 
 def get_all_recipe_urls(sheet):
     recipe_headers_raw = sheet.col_values(1, value_render_option='FORMULA')
