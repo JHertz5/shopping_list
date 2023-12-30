@@ -6,7 +6,6 @@ import sys
 
 from . import generate_shopping_list
 from . import get_recipe_urls
-from . import update_macros
 from . import suggest_recipe
 
 def print_help_message(options_dict):
@@ -26,7 +25,6 @@ def main():
     options_dict = {
         'generate_list'  : ['-g', '--generate_list', ''],
         'recipe_url'     : ['-r', '--recipe_url'],
-        'update_macros'  : ['-u', '--update_macros'],
         'suggest_recipe' : ['-s', '--suggest_recipe'],
         'help'           : ['-h', '--help']
     }
@@ -35,8 +33,6 @@ def main():
         generate_shopping_list.generate_shopping_list()
     elif user_input in options_dict['recipe_url']:
         get_recipe_urls.get_recipe_urls()
-    elif user_input in options_dict['update_macros']:
-        update_macros.update_macros()
     elif user_input in options_dict['suggest_recipe']:
         suggest_recipe.suggest_recipe()
     else:
