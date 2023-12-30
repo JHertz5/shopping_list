@@ -23,10 +23,10 @@ def main():
         user_input = ""
 
     options_dict = {
-        'generate_list'  : ['-g', '--generate_list', ''],
+        'generate_list'  : ['-g', '--generate_list'],
         'recipe_url'     : ['-r', '--recipe_url'],
         'suggest_recipe' : ['-s', '--suggest_recipe'],
-        'help'           : ['-h', '--help']
+        'help'           : ['-h', '--help', '']
     }
 
     if user_input in options_dict['generate_list']:
