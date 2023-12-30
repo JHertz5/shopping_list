@@ -7,6 +7,7 @@ import sys
 from . import generate_shopping_list
 from . import get_recipe_urls
 from . import suggest_recipe
+from . import version
 
 def print_help_message(options_dict):
     help_string = "usage: " + __package__ + " "
@@ -26,6 +27,7 @@ def main():
         'generate_list'  : ['-g', '--generate_list'],
         'recipe_url'     : ['-r', '--recipe_url'],
         'suggest_recipe' : ['-s', '--suggest_recipe'],
+        'version'        : ['-v', '--version'],
         'help'           : ['-h', '--help', '']
     }
 
@@ -35,6 +37,8 @@ def main():
         get_recipe_urls.get_recipe_urls()
     elif user_input in options_dict['suggest_recipe']:
         suggest_recipe.suggest_recipe()
+    elif user_input in options_dict['version']:
+        version.print_version_info()
     elif user_input in options_dict['help']:
         print_help_message(options_dict)
     else:
