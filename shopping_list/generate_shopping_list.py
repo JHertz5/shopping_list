@@ -1,10 +1,11 @@
 ''' function to generate shopping list '''
 
-import sheet_interface
-import shopping_list_manager
-import checklist_manager
-import push_file
 import os # for deleting file
+
+from . import sheet_interface
+from . import shopping_list_manager
+from . import checklist_manager
+from . import push_file
 
 def get_data_item_group(sheet):
     # extract data from item group sheet

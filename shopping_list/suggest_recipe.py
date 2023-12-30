@@ -1,6 +1,6 @@
 ''' function to suggest recipe and add it to input '''
 
-import sheet_interface
+from . import sheet_interface
 
 def get_data_items_list(sheet):
     # extract data from item group sheet
