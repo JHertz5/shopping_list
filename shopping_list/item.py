@@ -1,36 +1,35 @@
 '''
 A class representing an item.
 
-Attributes:
+Args:
 - name (str): The name of the item.
-- group (str): The group of the item.
-- quantity (int): The quantity of the item.
+- groups_dict (dict[str]): The group value for each possible grouping method.
 '''
 
+
 class Item:
-    def __init__(self, name, group, quantity):
+    def __init__(self, name, groups_dict):
         # Validate and assign initial attribute values.
-        if not isinstance(name, str):
-            raise ValueError('name must be a string.', name)
+        assert isinstance(name, str)
         self._name = name
-        if not isinstance(group, str):
-            raise ValueError('group must be a string.', group)
-        self._group = group
-        if not isinstance(quantity, int):
-            raise ValueError('quantity must be an integer.', quantity)
-        self._quantity = quantity
+        assert isinstance(groups_dict, dict)
+        self._groups_dict = groups_dict
+        self._quantity = 0
+
+    def __str__(self):
+        return "TODO"
 
     def get_name(self):
         return self._name
 
-    def set_group(self, group):
-        self._group = group
+    def get_group(self, grouping_method):
+        return self._groups_dict[grouping_method]
 
-    def get_group(self):
-        return self._group
+    def incr_quantity(self, incr_num):
+        self._quantity += incr_num
 
-    def set_quantity(self, quantity):
-        self._quantity = quantity
+    def reset_quantity(self):
+        self._quantity = 0
 
     def get_quantity(self):
         return self._quantity
