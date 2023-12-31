@@ -1,6 +1,6 @@
 ''' function to suggest recipe and add it to input '''
 
-from . import sheet_interface
+from . import spreadsheet
 
 def get_data_items_list(sheet):
     # extract data from item group sheet
@@ -61,7 +61,7 @@ def select_recipe(search_results):
     return new_recipe, search_complete
 
 def suggest_recipe():
-    sheets = sheet_interface.open_spreadsheet()
+    sheets = spreadsheet._open_spreadsheet()
     print('data connected')
 
     # extract data from recipe sheet
@@ -71,7 +71,7 @@ def suggest_recipe():
 
     # extract data from recipe sheet
     recipes_sheet = sheets.worksheet('Recipes')
-    recipes = sheet_interface.get_data_recipes(recipes_sheet)
+    recipes = spreadsheet.get_data_recipes(recipes_sheet)
     print('recipes retrieved')
 
     input_sheet = sheets.worksheet('Input')

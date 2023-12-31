@@ -2,7 +2,7 @@
 
 import os # for deleting file
 
-from . import sheet_interface
+from . import spreadsheet
 from . import shopping_list_manager
 from . import checklist_manager
 from . import push_file
@@ -63,7 +63,7 @@ def get_data_input(sheet):
     return input_data_dict
 
 def generate_shopping_list():
-    sheets = sheet_interface.open_spreadsheet()
+    sheet = spreadsheet.Spreadsheet()
     print('data connected')
 
     # extract data from items sheet
@@ -73,7 +73,7 @@ def generate_shopping_list():
 
     # extract data from recipe sheet
     recipes_sheet = sheets.worksheet('Recipes')
-    recipes       = sheet_interface.get_data_recipes(recipes_sheet)
+    recipes       = sheet.get_data_recipes(recipes_sheet)
     print('recipes retrieved')
 
     generate_list = True
