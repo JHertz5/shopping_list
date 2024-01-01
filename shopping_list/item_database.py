@@ -5,10 +5,14 @@ class ItemDatabase:
     '''
     TODO comment
     '''
+
     def __init__(self, item_dict={}):
         # Validate and assign initial attribute values.
         assert isinstance(item_dict, dict)
         self._item_dict = item_dict
+
+    def get_item_dict(self):
+        return self._item_dict
 
     def reset_quantities_for_list_of_items(self, item_list):
         assert isinstance(item_list, list)
@@ -39,3 +43,18 @@ class ItemDatabase:
 
     def add_new_item(self, item_name, groups_dict={}):
         self._item_dict[item_name] = item.Item(item_name, groups_dict)
+
+    def get_non_zero_quantity_item_name_list(self):
+        item_name_list = []
+        for item_name, item_obj in self._item_dict.items():
+            if item_obj.get_quantity() > 0:
+                item_name_list.append(item_name)
+        return item_name_list
+
+    def get_non_zero_quantity_item_quanitity_dict(self):
+        # TODO I feel like this would be simpler if each item was just a dict rather than an object.
+        item_name_list = self.get_non_zero_quantity_item_name_list()
+        item_quantity_dict = {}
+        for item_name in item_name_list:
+            item_quantity_dict[item_name] = self._item_dict[item_name].get_quantity()
+        return item_quantity_dict
