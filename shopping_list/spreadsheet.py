@@ -1,8 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from . import item_database
-from . import recipe_database
+from .database import item_database
+from .database import recipe_database
 
 
 class Spreadsheet:
