@@ -1,11 +1,14 @@
 from datetime import datetime
 
-class checklist_manager:
+class Checklist:
 
-    def __init__(self):
-        # generate filename
-        now = datetime.now()
-        self.filename = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S') + ".txt"
+    def __init__(self, filename=''):
+        if filename == '':
+            # generate filename
+            now = datetime.now()
+            self.filename = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S') + ".txt"
+        else:
+            self.filename = filename
 
         self.file = open(self.filename,'w')
 
@@ -32,6 +35,12 @@ class checklist_manager:
 
         self.file.close()
 
-    def add_line(self, text, group):
-        line = text + " @" + group + '\n'
+    def add_line(self, text, group, tag_list=[]):
+        # Validate inputs.
+        assert isinstance(text, str)
+        assert isinstance(group, str)
+        assert isinstance(tag_list, list)
+
+        tag_list_formatted = [' +' + tag for tag in tag_list]
+        line = text + " @" + group + "".join(tag_list_formatted) + '\n'
         self.file.write(line)
