@@ -58,7 +58,7 @@ class Spreadsheet:
 
     def get_recipe_sheet_data(self):
         # Get data from the sheet.
-        recipe_rows = self._recipes_sheet.get_all_values()
+        recipe_rows = self._recipes_sheet.get_values()
 
         # Construct recipes dict.
         recipes = recipe_database.RecipeDatabase()
