@@ -12,7 +12,13 @@ class Spreadsheet:
     '''
 
     def __init__(self):
-        self.workbook = self._open_spreadsheet()
+        self._workbook = self._open_spreadsheet()
+        # Open the item sheet.
+        self._items_sheet = self._workbook.worksheet('Items')
+        # Open the recipes sheet.
+        self._recipes_sheet = self._workbook.worksheet('Recipes')
+        # Open the input sheet.
+        self._input_sheet = self._workbook.worksheet('Input')
 
     def _open_spreadsheet(self):
         # use creds to create a client to interact with the Google Drive API
@@ -28,11 +34,14 @@ class Spreadsheet:
         # Find a workbook by name and open sheets
         return client.open("Shopping List")
 
+    def get_item_list(self):
+        # Extract the first column data from the items sheet excluding header row.
+        item_list = self._items_sheet.col_values(1)[1:]
+        return item_list
+
     def get_item_sheet_data(self):
-        # Open the item sheet.
-        items_sheet = self.workbook.worksheet('Items')
         # Get data from the sheet.
-        item_dicts_list = items_sheet.get_all_records()
+        item_dicts_list = self._items_sheet.get_all_records()
 
         grouping_options = list(item_dicts_list[0].keys())[1:]
 
@@ -48,10 +57,8 @@ class Spreadsheet:
         return items, grouping_options
 
     def get_recipe_sheet_data(self):
-        # Open the recipes sheet.
-        recipes_sheet = self.workbook.worksheet('Recipes')
         # Get data from the sheet.
-        recipe_rows = recipes_sheet.get_all_values()
+        recipe_rows = self._recipes_sheet.get_all_values()
 
         # Construct recipes dict.
         recipes = recipe_database.RecipeDatabase()
@@ -65,15 +72,13 @@ class Spreadsheet:
         return recipes
 
     def get_input_sheet_data(self):
-        # Open the input sheet.
-        input_sheet = self.workbook.worksheet('Input')
         # Get input config data.
         input_sheet_data_dict = {}
         number_of_columns = 4
         # TODO surely this can be improved? Use get, or get_values instead? Issue #32.
         for column_index in range(1, number_of_columns):
             # Pull column data into list.
-            column = input_sheet.col_values(column_index)
+            column = self._input_sheet.col_values(column_index)
             column_heading = column[0]
             # Remove any empty strings with list comprehension.
             column_data = [x for x in column[1:] if x]
@@ -84,3 +89,8 @@ class Spreadsheet:
         inclusions_list = input_sheet_data_dict['Inclusions']
 
         return meals_to_buy_list, exclusions_list, inclusions_list
+
+    def add_new_meal_to_buy(self, meals_to_buy_list, new_recipe_name):
+        new_recipe_row = len(meals_to_buy_list) + 1
+        new_recipe_col = 1 # TODO magic number
+        self._input_sheet.update_cell(new_recipe_row, new_recipe_col, new_recipe_name)
