@@ -9,7 +9,7 @@ def generate_timestamp_filename():
     return return_string
 
 
-def generate_file(filename, recipe_quantity_dict, item_dict, item_grouping_method):
+def write_report(filename, recipe_quantity_dict, item_dict, item_grouping_method):
     write_string_list = []
 
     # Add recipes to file.

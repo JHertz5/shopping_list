@@ -64,11 +64,9 @@ def generate_shopping_list():
         # Update the quantities in the items database, based on the inclusions.
         items.incr_quantities_for_list_of_items(inclusions_list)
 
-        print(
-            report.preview.generate_report(
-                recipes.get_non_zero_quantity_recipe_quanitity_dict(),
-                items.get_non_zero_quantity_item_quanitity_dict()
-            )
+        report.preview.print_report(
+            recipes.get_non_zero_quantity_recipe_quanitity_dict(),
+            items.get_non_zero_quantity_item_quanitity_dict()
         )
         print('shopping list generated')
 
@@ -82,7 +80,7 @@ def generate_shopping_list():
 
                 # generate checklist file
                 checklist_filename = report.checklist.generate_timestamp_filename()
-                report.checklist.generate_file(
+                report.checklist.write_report(
                     checklist_filename,
                     recipes.get_non_zero_quantity_recipe_quanitity_dict(),
                     items.get_non_zero_quantity_item_dict(),
