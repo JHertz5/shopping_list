@@ -1,6 +1,6 @@
 class Item:
     '''
-    A class representing an item.
+    A class representing an item to be purchased from the shop.
     TODO better comments, remove args.
 
     Args:
@@ -16,9 +16,6 @@ class Item:
         self._groups_dict = groups_dict
         self._quantity = 0
 
-    def __str__(self):
-        return "TODO"
-
     # TODO name unused?
     def get_name(self):
         return self._name
@@ -26,8 +23,8 @@ class Item:
     def get_group(self, grouping_method):
         return self._groups_dict[grouping_method]
 
-    def incr_quantity(self, incr_num):
-        self._quantity += incr_num
+    def incr_quantity(self):
+        self._quantity += 1
 
     def reset_quantity(self):
         self._quantity = 0
