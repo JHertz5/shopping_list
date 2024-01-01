@@ -28,11 +28,13 @@ class Spreadsheet:
         # Find a workbook by name and open sheets
         return client.open("Shopping List")
 
-    def get_item_database(self):
+    def get_item_sheet_data(self):
         # Open the item sheet.
         items_sheet = self.workbook.worksheet('Items')
         # Get data from the sheet.
         item_dicts_list = items_sheet.get_all_records()
+
+        grouping_options = list(item_dicts_list[0].keys())[1:]
 
         # Construct the items dict.
         items = item_database.ItemDatabase()
@@ -43,9 +45,9 @@ class Spreadsheet:
             item_name = record.pop('Name')
             items.add_new_item(item_name, record)
 
-        return items
+        return items, grouping_options
 
-    def get_recipe_database(self):
+    def get_recipe_sheet_data(self):
         # Open the recipes sheet.
         recipes_sheet = self.workbook.worksheet('Recipes')
         # Get data from the sheet.
@@ -62,23 +64,23 @@ class Spreadsheet:
 
         return recipes
 
-    def get_input_sheet_config(self):
+    def get_input_sheet_data(self):
         # Open the input sheet.
-        input_sheet_config_sheet = self.workbook.worksheet('Input')
+        input_sheet = self.workbook.worksheet('Input')
         # Get input config data.
-        input_sheet_config_data_dict = {}
+        input_sheet_data_dict = {}
         number_of_columns = 4
         # TODO surely this can be improved? Use get, or get_values instead? Issue #32.
         for column_index in range(1, number_of_columns):
             # Pull column data into list.
-            column = input_sheet_config_sheet.col_values(column_index)
+            column = input_sheet.col_values(column_index)
             column_heading = column[0]
             # Remove any empty strings with list comprehension.
             column_data = [x for x in column[1:] if x]
-            input_sheet_config_data_dict[column_heading] = column_data
+            input_sheet_data_dict[column_heading] = column_data
 
-        meals_to_buy_list = input_sheet_config_data_dict['Meals To Buy']
-        exclusions_list = input_sheet_config_data_dict['Exclusions']
-        inclusions_list = input_sheet_config_data_dict['Inclusions']
+        meals_to_buy_list = input_sheet_data_dict['Meals To Buy']
+        exclusions_list = input_sheet_data_dict['Exclusions']
+        inclusions_list = input_sheet_data_dict['Inclusions']
 
         return meals_to_buy_list, exclusions_list, inclusions_list
