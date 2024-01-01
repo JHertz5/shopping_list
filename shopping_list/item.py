@@ -1,13 +1,13 @@
-'''
-A class representing an item.
-
-Args:
-- name (str): The name of the item.
-- groups_dict (dict[str]): The group value for each possible grouping method.
-'''
-
-
 class Item:
+    '''
+    A class representing an item.
+    TODO better comments, remove args.
+
+    Args:
+    - name (str): The name of the item.
+    - groups_dict (dict[str]): The group value for each possible grouping method.
+    '''
+
     def __init__(self, name, groups_dict):
         # Validate and assign initial attribute values.
         assert isinstance(name, str)
@@ -19,6 +19,7 @@ class Item:
     def __str__(self):
         return "TODO"
 
+    # TODO name unused?
     def get_name(self):
         return self._name
 

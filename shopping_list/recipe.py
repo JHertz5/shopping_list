@@ -1,25 +1,24 @@
-'''
-A class representing a recipe.
-
-Args:
-- name (str): The name of the recipe.
-- url (str): The URL of the recipe.
-- ingredients_list (list): A list of ingredients for the recipe.
-'''
-
-
 class Recipe:
-    def __init__(self, name, url, ingredients_list):
+    '''
+    A class representing a recipe.
+    TODO better comments, remove args.
+
+    Args:
+    - name (str): The name of the recipe.
+    - url (str): The URL of the recipe.
+    - ingredients_list (list[str]): A list of ingredients for the recipe.
+    '''
+
+    def __init__(self, name, ingredients_list, url=''):
         # Validate and assign initial attribute values.
-        if not isinstance(name, str):
-            raise ValueError('name must be a string.', name)
+        assert isinstance(name, str)
+        # TODO name unused?
         self._name = name
-        if not isinstance(url, str):
-            raise ValueError('url must be a string.', url)
-        self._url = url
-        if not isinstance(ingredients_list, list):
-            raise ValueError('ingredients_list must be a list.', ingredients_list)
+        assert isinstance(ingredients_list, list)
         self._ingredients_list = ingredients_list
+        # TODO url is currently unused. Remove?
+        assert isinstance(url, str)
+        self._url = url
 
     def get_name(self):
         return self._name
