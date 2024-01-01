@@ -6,11 +6,11 @@ from . import report
 
 
 def generate_shopping_list():
-    sheet = spreadsheet.Spreadsheet()
+    sheets = spreadsheet.Spreadsheet()
     print('data connected')
 
     # Extract data from items sheet and construct items database
-    items, grouping_options = sheet.get_item_sheet_data()
+    items, grouping_options = sheets.get_item_sheet_data()
     print('items retrieved')
 
     # Get user's grouping selection.
@@ -35,12 +35,12 @@ def generate_shopping_list():
         except BaseException:
             print('grouping selection must be int')
 
-    # convert result from int to string to use as key
+    # Convert result from int to string to use as key.
     grouping_selection = grouping_options[grouping_selection_int]
     print('\t{} selected\n'.format(grouping_selection))
 
     # Extract data from recipes sheet.
-    recipes = sheet.get_recipe_sheet_data()
+    recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
     # TODO change this to a function rather than a loop, with top-level control?
@@ -48,7 +48,7 @@ def generate_shopping_list():
     while not user_input_finalised:
 
         # Extract data from the input sheet.
-        meals_to_buy_list, exclusions_list, inclusions_list = sheet.get_input_sheet_data()
+        meals_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
         print('input retrieved')
 
         # Update the quantities in the recipe database, based on the meals to be bought.
