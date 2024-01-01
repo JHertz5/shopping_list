@@ -9,6 +9,7 @@ from . import get_recipe_urls
 from . import suggest_recipe
 from . import version
 
+
 def print_help_message(options_dict):
     help_string = "usage: " + __package__ + " "
     options_strings = ["[" + " | ".join(options_dict[key]) + "] " for key in options_dict.keys()]
@@ -24,11 +25,11 @@ def main():
         user_input = ""
 
     options_dict = {
-        'generate_list'  : ['-g', '--generate_list'],
-        'recipe_url'     : ['-r', '--recipe_url'],
-        'suggest_recipe' : ['-s', '--suggest_recipe'],
-        'version'        : ['-v', '--version'],
-        'help'           : ['-h', '--help', '']
+        'generate_list': ['-g', '--generate_list'],
+        'recipe_url': ['-r', '--recipe_url'],
+        'suggest_recipe': ['-s', '--suggest_recipe'],
+        'version': ['-v', '--version'],
+        'help': ['-h', '--help', '']
     }
 
     if user_input in options_dict['generate_list']:
@@ -44,6 +45,7 @@ def main():
     else:
         print('unknown option: {}'.format(user_input))
         print_help_message(options_dict)
+
 
 if __name__ == "__main__":
     main()

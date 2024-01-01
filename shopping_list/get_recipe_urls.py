@@ -7,6 +7,7 @@ import webbrowser
 
 from . import spreadsheet
 
+
 def get_all_recipe_urls(sheet):
     recipe_headers_raw = sheet.col_values(1, value_render_option='FORMULA')
     recipe_url_dict = {}
@@ -14,15 +15,16 @@ def get_all_recipe_urls(sheet):
         if "HYPERLINK" in recipe_formula:
             # parse url and recipe from google sheets HYPERLINK formula format
             match_result = re.match(r'.*\("(.*)","(.*)"\)', recipe_formula)
-            recipe_url   = match_result.group(1)
-            recipe_name  = match_result.group(2)
+            recipe_url = match_result.group(1)
+            recipe_name = match_result.group(2)
         else:
             # no url in cell, treat as plaintext name
             recipe_name = recipe_formula
-            recipe_url  = ""
+            recipe_url = ""
         # create dict entry of recipe name:recipe url
         recipe_url_dict[recipe_name] = recipe_url
     return recipe_url_dict
+
 
 def select_recipe(input_recipes):
     # get user to select recipe from input recipes
@@ -30,8 +32,8 @@ def select_recipe(input_recipes):
     while not input_valid:
 
         print('recipes on input list:')
-        for index,recipe in enumerate(input_recipes):
-         print('\t{} - {}'.format(index,recipe))
+        for index, recipe in enumerate(input_recipes):
+            print('\t{} - {}'.format(index, recipe))
 
         recipe_selection_raw = input('pick recipe: ')
         # check validity of selection
@@ -41,11 +43,12 @@ def select_recipe(input_recipes):
                 input_valid = True
             else:
                 print('input must be in range [{}-{}]'.format(
-                    0, len(input_recipes)-1) )
-        except:
+                    0, len(input_recipes) - 1))
+        except BaseException:
             print('recipe selection must be int')
 
     return recipe_selection_int
+
 
 def get_recipe_urls():
     sheets = spreadsheet._open_spreadsheet()
@@ -73,21 +76,22 @@ def get_recipe_urls():
     if recipe_url == "":
         print("no url available")
     else:
-        print('{} -> {}'.format(recipe_selection,recipe_url))
+        print('{} -> {}'.format(recipe_selection, recipe_url))
 
         input_valid = False
         while not input_valid:
             option_input = input('[o]pen url or [q]uit?: ')
-            if option_input == 'o': # open url
+            if option_input == 'o':  # open url
                 input_valid = True
                 print('\topen url selected')
-                webbrowser.open(recipe_url,new=2)
-            elif option_input == 'q': # quit
+                webbrowser.open(recipe_url, new=2)
+            elif option_input == 'q':  # quit
                 input_valid = True
                 print('\tquit selected')
             else:
-                print('{} is not valid input {}'.format(option_input,option_responses))
+                print('{} is not valid input {}'.format(option_input, option_responses))
                 option_input = input(option_question)
+
 
 if __name__ == "__main__":
     get_recipe_urls()
