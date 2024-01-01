@@ -14,8 +14,8 @@ def get_version_info():
 
     # This dict is the definition of the version number.
     version_dict = {
-        'major': 2,
-        'minor': 5,
+        'major': 3,
+        'minor': 0,
         'patch': 0
     }
     version_string = '.'.join(str(c) for c in version_dict.values())
