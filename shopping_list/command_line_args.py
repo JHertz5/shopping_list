@@ -4,12 +4,13 @@ import sys
 import os
 
 
+# TODO use/modify
 def __is_valid_file(value: str) -> str:
-    """
+    '''
     Check an argument in argparse to be a path to an existing file
     :param value: String path to analyze.
     :return:
-    """
+    '''
     # TODO
     lFileNames = glob.glob(os.path.expanduser(os.path.expandvars(value)), recursive=True)
     if len(lFileNames) == 0:
@@ -21,6 +22,9 @@ def __is_valid_file(value: str) -> str:
 
 
 def parse_command_line_args():
+    '''
+    Parse the command line arguments using argparse.
+    '''
     parser = argparse.ArgumentParser(
         prog='Shopping List',
         description='''
