@@ -21,7 +21,13 @@ class Item:
         return self._name
 
     def get_group(self, grouping_method):
-        return self._groups_dict[grouping_method]
+        if grouping_method in self._groups_dict.keys():
+            return_string = str(self._groups_dict[grouping_method])
+        else:
+            # If the grouping method does not match a key for this dict, the item is not part of any group in this
+            # grouping method.
+            return_string = 'none'
+        return return_string
 
     def incr_quantity(self):
         self._quantity += 1
