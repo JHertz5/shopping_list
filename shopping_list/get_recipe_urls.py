@@ -5,7 +5,7 @@
 import re
 import webbrowser
 
-from . import sheet_interface
+from . import spreadsheet
 
 def get_all_recipe_urls(sheet):
     recipe_headers_raw = sheet.col_values(1, value_render_option='FORMULA')
@@ -48,7 +48,7 @@ def select_recipe(input_recipes):
     return recipe_selection_int
 
 def get_recipe_urls():
-    sheets = sheet_interface.open_spreadsheet()
+    sheets = spreadsheet._open_spreadsheet()
     print('data connected')
 
     # get list of input recipes

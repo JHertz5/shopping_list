@@ -1,11 +1,7 @@
 ''' function to suggest recipe and add it to input '''
 
-from . import sheet_interface
+from . import spreadsheet
 
-def get_data_items_list(sheet):
-    # extract data from item group sheet
-    item_list = sheet.col_values(1)[1:] # get item column data excluding header
-    return(item_list)
 
 def recipe_search(item_list, recipes):
     # get item to search for from user input
@@ -13,7 +9,7 @@ def recipe_search(item_list, recipes):
     while not input_recognised:
         print('known items: ' + ', '.join(item_list))
         user_input_item = input('input item: ')
-        search_item     = user_input_item.title() # items are in Title Case
+        search_item = user_input_item.title()  # items are in Title Case
 
         if search_item not in item_list:
             print('{} not in items list'.format(search_item))
@@ -22,28 +18,29 @@ def recipe_search(item_list, recipes):
 
     # get recipes containing search_item
     print('searching for {}'.format(search_item))
-    return [ x for x in recipes.keys() if search_item in recipes[x] ]
+    return recipes.get_recipes_containing_item(search_item)
+
 
 def select_recipe(search_results):
-    search_complete = False # default value
-    new_recipe      = ''    # default value
-    input_valid     = False
+    search_complete = False  # default value
+    new_recipe = ''    # default value
+    input_valid = False
     while not input_valid:
 
         print('recipes containing item:')
-        for index,recipe in enumerate(search_results):
-            print('\t{} - {}'.format(index,recipe))
+        for index, recipe in enumerate(search_results):
+            print('\t{} - {}'.format(index, recipe))
 
         user_input_raw = input('select recipe to add to list or [q]uit or [n]ew search: ')
         # check user input
         if user_input_raw == 'q':
             print('quit selected')
             search_complete = True
-            input_valid     = True
+            input_valid = True
         elif user_input_raw == 'n':
             print('new seach selected')
             search_complete = False
-            input_valid     = True
+            input_valid = True
         else:
             try:
                 recipe_selection_int = int(user_input_raw)
@@ -51,31 +48,30 @@ def select_recipe(search_results):
                     input_valid = True
                 else:
                     print('input must be in range [{}-{}]'.format(
-                            0, len(search_results)-1) )
-            except:
+                        0, len(search_results) - 1))
+            except BaseException:
                 print('recipe selection must be int')
 
             search_complete = True
-            new_recipe      = search_results[recipe_selection_int]
+            new_recipe = search_results[recipe_selection_int]
             print('{} selected'.format(new_recipe))
     return new_recipe, search_complete
 
+
 def suggest_recipe():
-    sheets = sheet_interface.open_spreadsheet()
+    sheets = spreadsheet.Spreadsheet()
     print('data connected')
 
-    # extract data from recipe sheet
-    items_sheet = sheets.worksheet('Items')
-    item_list = get_data_items_list(items_sheet)
+    # Extract data from item sheet.
+    item_list = sheets.get_item_list()
     print('items retrieved')
 
-    # extract data from recipe sheet
-    recipes_sheet = sheets.worksheet('Recipes')
-    recipes = sheet_interface.get_data_recipes(recipes_sheet)
+    # Extract data from recipes sheet.
+    recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
-    input_sheet = sheets.worksheet('Input')
-    input_recipes_col = input_sheet.col_values(1)
+    # Extract data from the input sheet.
+    meals_to_buy_list = sheets.get_input_sheet_data()
     print('input retrieved')
 
     search_complete = False
@@ -87,11 +83,5 @@ def suggest_recipe():
             (new_recipe, search_complete) = select_recipe(search_results)
 
     if new_recipe != '':
-        # append new recipe onto input recipes column
-        new_recipe_row = len(input_recipes_col) + 1
-        new_recipe_col = 1
-        input_sheet.update_cell(new_recipe_row, new_recipe_col, new_recipe)
+        sheets.add_new_meal_to_buy(meals_to_buy_list, new_recipe)
         print('{} written to spreadsheet'.format(new_recipe))
-
-if __name__ == '__main__':
-    suggest_recipe()
