@@ -105,7 +105,3 @@ def generate_shopping_list():
                 user_input_finalised = True  # end script
             else:
                 print('{} is not valid input'.format(send_list_input))
-
-
-if __name__ == "__main__":
-    generate_shopping_list()
