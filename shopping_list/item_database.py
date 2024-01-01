@@ -58,3 +58,7 @@ class ItemDatabase:
         for item_name in item_name_list:
             item_quantity_dict[item_name] = self._item_dict[item_name].get_quantity()
         return item_quantity_dict
+
+    def get_non_zero_quantity_item_dict(self):
+        non_zero_quantity_item_dict = {x : self._item_dict[x] for x in self._item_dict if self._item_dict[x].get_quantity() > 0}
+        return non_zero_quantity_item_dict
