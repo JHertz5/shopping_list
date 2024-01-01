@@ -1,9 +1,12 @@
-from shopping_list import item_database
-from shopping_list import recipe_database
+'''
+TODO comment
+'''
+
 
 def print_report(recipe_quantity_dict, item_quantity_dict):
     print_string = _generate_report(recipe_quantity_dict, item_quantity_dict)
     print(print_string)
+
 
 def _generate_report(recipe_quantity_dict, item_quantity_dict):
     recipe_strings = ['{} ({})'.format(x, recipe_quantity_dict[x]) for x in recipe_quantity_dict.keys()]

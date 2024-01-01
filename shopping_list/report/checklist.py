@@ -1,6 +1,8 @@
+'''
+TODO comment
+'''
+
 from datetime import datetime
-from shopping_list import item_database
-from shopping_list import recipe_database
 
 
 def generate_timestamp_filename():
@@ -15,14 +17,14 @@ def write_report(filename, recipe_quantity_dict, item_dict, item_grouping_method
     # Add recipes to file.
     for recipe_name, recipe_quantity in recipe_quantity_dict.items():
         recipe_str = '{} ({})'.format(recipe_name, recipe_quantity)
-        line_string =_generate_line(recipe_str, 'recipes')
+        line_string = _generate_line(recipe_str, 'recipes')
         write_string_list.append(line_string)
 
     # Add items to the file.
     for item_name, item_obj in item_dict.items():
         item_str = '{} ({})'.format(item_name, item_obj.get_quantity())
         item_group = item_obj.get_group(item_grouping_method)
-        line_string =_generate_line(item_str, item_group)
+        line_string = _generate_line(item_str, item_group)
         write_string_list.append(line_string)
 
     # Write the lines to the file.
