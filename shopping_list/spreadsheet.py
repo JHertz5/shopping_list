@@ -14,7 +14,7 @@ class Spreadsheet:
     def __init__(self):
         self._workbook = self._open_spreadsheet()
         # Open the ingredient sheet.
-        self._ingredients_sheet = self._workbook.worksheet('ingredients')
+        self._ingredients_sheet = self._workbook.worksheet('Items')
         # Open the recipes sheet.
         self._recipes_sheet = self._workbook.worksheet('Recipes')
         # Open the input sheet.
