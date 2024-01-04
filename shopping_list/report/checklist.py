@@ -11,7 +11,7 @@ def generate_timestamp_filename():
     return return_string
 
 
-def write_report(filename, recipe_quantity_dict, item_dict, item_grouping_method):
+def write_report(filename, recipe_quantity_dict, ingredient_dict, ingredient_grouping_method):
     write_string_list = []
 
     # Add recipes to file.
@@ -20,11 +20,11 @@ def write_report(filename, recipe_quantity_dict, item_dict, item_grouping_method
         line_string = _generate_line(recipe_str, 'recipes')
         write_string_list.append(line_string)
 
-    # Add items to the file.
-    for item_name, item_obj in item_dict.items():
-        item_str = '{} ({})'.format(item_name, item_obj.get_quantity())
-        item_group = item_obj.get_group(item_grouping_method)
-        line_string = _generate_line(item_str, item_group)
+    # Add ingredients to the file.
+    for ingredient_name, ingredient_obj in ingredient_dict.items():
+        ingredient_str = '{} ({})'.format(ingredient_name, ingredient_obj.get_quantity())
+        ingredient_group = ingredient_obj.get_group(ingredient_grouping_method)
+        line_string = _generate_line(ingredient_str, ingredient_group)
         write_string_list.append(line_string)
 
     # Write the lines to the file.

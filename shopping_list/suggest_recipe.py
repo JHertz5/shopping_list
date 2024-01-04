@@ -3,22 +3,22 @@
 from . import spreadsheet
 
 
-def recipe_search(item_list, recipes):
-    # get item to search for from user input
+def recipe_search(ingredient_list, recipes):
+    # get ingredient to search for from user input
     input_recognised = False
     while not input_recognised:
-        print('known items: ' + ', '.join(item_list))
-        user_input_item = input('input item: ')
-        search_item = user_input_item.title()  # items are in Title Case
+        print('known ingredients: ' + ', '.join(ingredient_list))
+        user_input_ingredient = input('input ingredient: ')
+        search_ingredient = user_input_ingredient.title()  # ingredients are in Title Case
 
-        if search_item not in item_list:
-            print('{} not in items list'.format(search_item))
+        if search_ingredient not in ingredient_list:
+            print('{} not in ingredients list'.format(search_ingredient))
         else:
             input_recognised = True
 
-    # get recipes containing search_item
-    print('searching for {}'.format(search_item))
-    return recipes.get_recipes_containing_item(search_item)
+    # get recipes containing search_ingredient
+    print('searching for {}'.format(search_ingredient))
+    return recipes.get_recipes_containing_ingredient(search_ingredient)
 
 
 def select_recipe(search_results):
@@ -27,7 +27,7 @@ def select_recipe(search_results):
     input_valid = False
     while not input_valid:
 
-        print('recipes containing item:')
+        print('recipes containing ingredient:')
         for index, recipe in enumerate(search_results):
             print('\t{} - {}'.format(index, recipe))
 
@@ -62,9 +62,9 @@ def suggest_recipe():
     sheets = spreadsheet.Spreadsheet()
     print('data connected')
 
-    # Extract data from item sheet.
-    item_list = sheets.get_item_list()
-    print('items retrieved')
+    # Extract data from ingredient sheet.
+    ingredient_list = sheets.get_ingredient_list()
+    print('ingredients retrieved')
 
     # Extract data from recipes sheet.
     recipes = sheets.get_recipe_sheet_data()
@@ -76,9 +76,9 @@ def suggest_recipe():
 
     search_complete = False
     while not search_complete:
-        search_results = recipe_search(item_list, recipes)
+        search_results = recipe_search(ingredient_list, recipes)
         if search_results == []:
-            print('no recipes containing item')
+            print('no recipes containing ingredient')
         else:
             (new_recipe, search_complete) = select_recipe(search_results)
 

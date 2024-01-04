@@ -1,10 +1,10 @@
-class Item:
+class ingredient:
     '''
-    A class representing an item to be purchased from the shop.
+    A class representing an ingredient to be purchased from the shop.
     TODO better comments, remove args.
 
     Args:
-    - name (str): The name of the item.
+    - name (str): The name of the ingredient.
     - groups_dict (dict[str]): The group value for each possible grouping method.
     '''
 
@@ -24,7 +24,7 @@ class Item:
         if grouping_method in self._groups_dict.keys():
             return_string = str(self._groups_dict[grouping_method])
         else:
-            # If the grouping method does not match a key for this dict, the item is not part of any group in this
+            # If the grouping method does not match a key for this dict, the ingredient is not part of any group in this
             # grouping method.
             return_string = 'none'
         return return_string

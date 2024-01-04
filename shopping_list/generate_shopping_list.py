@@ -9,9 +9,9 @@ def generate_shopping_list():
     sheets = spreadsheet.Spreadsheet()
     print('data connected')
 
-    # Extract data from items sheet and construct items database
-    items, grouping_options = sheets.get_item_sheet_data()
-    print('items retrieved')
+    # Extract data from ingredients sheet and construct ingredients database
+    ingredients, grouping_options = sheets.get_ingredient_sheet_data()
+    print('ingredients retrieved')
 
     # Get user's grouping selection.
     input_valid = False
@@ -54,17 +54,17 @@ def generate_shopping_list():
         # Update the quantities in the recipe database, based on the meals to be bought.
         recipes.incr_quantities_for_list_of_irecipes(meals_to_buy_list)
 
-        # Update the quantities in the items database, based on the recipe quantities.
-        recipe_item_list = recipes.get_non_zero_quantity_recipe_item_list()
-        items.incr_quantities_for_list_of_items(recipe_item_list)
-        # Update the quantities in the items database, based on the exclusions.
-        items.reset_quantities_for_list_of_items(exclusions_list)
-        # Update the quantities in the items database, based on the inclusions.
-        items.incr_quantities_for_list_of_items(inclusions_list)
+        # Update the quantities in the ingredients database, based on the recipe quantities.
+        recipe_ingredient_list = recipes.get_non_zero_quantity_recipe_ingredient_list()
+        ingredients.incr_quantities_for_list_of_ingredients(recipe_ingredient_list)
+        # Update the quantities in the ingredients database, based on the exclusions.
+        ingredients.reset_quantities_for_list_of_ingredients(exclusions_list)
+        # Update the quantities in the ingredients database, based on the inclusions.
+        ingredients.incr_quantities_for_list_of_ingredients(inclusions_list)
 
         report.preview.print_report(
             recipes.get_non_zero_quantity_recipe_quanitity_dict(),
-            items.get_non_zero_quantity_item_quanitity_dict()
+            ingredients.get_non_zero_quantity_ingredient_quanitity_dict()
         )
         print('shopping list generated')
 
@@ -81,7 +81,7 @@ def generate_shopping_list():
                 report.checklist.write_report(
                     checklist_filename,
                     recipes.get_non_zero_quantity_recipe_quanitity_dict(),
-                    items.get_non_zero_quantity_item_dict(),
+                    ingredients.get_non_zero_quantity_ingredient_dict(),
                     grouping_selection
                 )
                 print('\t{} generated'.format(checklist_filename))
