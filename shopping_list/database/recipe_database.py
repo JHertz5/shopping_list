@@ -35,11 +35,11 @@ class RecipeDatabase:
                 recipe_name_list.append(recipe_name)
         return recipe_name_list
 
-    def get_non_zero_quantity_recipe_item_list(self):
-        recipe_item_list = []
+    def get_non_zero_quantity_recipe_ingredient_list(self):
+        recipe_ingredient_list = []
         for recipe_name in self.get_non_zero_quantity_recipe_name_list():
-            recipe_item_list += self._recipe_dict[recipe_name].get_items_list()
-        return recipe_item_list
+            recipe_ingredient_list += self._recipe_dict[recipe_name].get_ingredients_list()
+        return recipe_ingredient_list
 
     def get_non_zero_quantity_recipe_quanitity_dict(self):
         # TODO I think this method is too specific. Replace with a dict of just the non-zero recipes?
@@ -50,8 +50,8 @@ class RecipeDatabase:
             recipe_quantity_dict[recipe_name] = self._recipe_dict[recipe_name].get_quantity()
         return recipe_quantity_dict
 
-    def get_recipes_containing_item(self, item):
+    def get_recipes_containing_ingredient(self, ingredient):
         # TODO if this was a dict of dicts, we would just do
-        # return [x for x in recipes.keys() if search_item in recipes[x]]
-        recipe_list = [x for x in self._recipe_dict.keys() if self._recipe_dict[x].is_item_in_recipe(item)]
+        # return [x for x in recipes.keys() if search_ingredient in recipes[x]]
+        recipe_list = [x for x in self._recipe_dict.keys() if self._recipe_dict[x].is_ingredient_in_recipe(ingredient)]
         return recipe_list

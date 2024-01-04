@@ -1,7 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from .database import item_database
+from .database import ingredient_database
 from .database import recipe_database
 
 
@@ -13,8 +13,8 @@ class Spreadsheet:
 
     def __init__(self):
         self._workbook = self._open_spreadsheet()
-        # Open the item sheet.
-        self._items_sheet = self._workbook.worksheet('Items')
+        # Open the ingredient sheet.
+        self._ingredients_sheet = self._workbook.worksheet('ingredients')
         # Open the recipes sheet.
         self._recipes_sheet = self._workbook.worksheet('Recipes')
         # Open the input sheet.
@@ -34,27 +34,27 @@ class Spreadsheet:
         # Find a workbook by name and open sheets
         return client.open("Shopping List")
 
-    def get_item_list(self):
-        # Extract the first column data from the items sheet excluding header row.
-        item_list = self._items_sheet.col_values(1)[1:]
-        return item_list
+    def get_ingredient_list(self):
+        # Extract the first column data from the ingredients sheet excluding header row.
+        ingredient_list = self._ingredients_sheet.col_values(1)[1:]
+        return ingredient_list
 
-    def get_item_sheet_data(self):
+    def get_ingredient_sheet_data(self):
         # Get data from the sheet.
-        item_dicts_list = self._items_sheet.get_all_records()
+        ingredient_dicts_list = self._ingredients_sheet.get_all_records()
 
-        grouping_options = list(item_dicts_list[0].keys())[1:]
+        grouping_options = list(ingredient_dicts_list[0].keys())[1:]
 
-        # Construct the items dict.
-        items = item_database.ItemDatabase()
-        for record in item_dicts_list:
-            # The record holds the name of the item and all of the groupings. The name and the groupings must be
-            # provided separately to the item class, so extract the name from the record and construct an instance of
-            # the item object.
-            item_name = record.pop('Name')
-            items.add_new_item(item_name, record)
+        # Construct the ingredients dict.
+        ingredients = ingredient_database.ingredientDatabase()
+        for record in ingredient_dicts_list:
+            # The record holds the name of the ingredient and all of the groupings. The name and the groupings must be
+            # provided separately to the ingredient class, so extract the name from the record and construct an instance of
+            # the ingredient object.
+            ingredient_name = record.pop('Name')
+            ingredients.add_new_ingredient(ingredient_name, record)
 
-        return items, grouping_options
+        return ingredients, grouping_options
 
     def get_recipe_sheet_data(self):
         # Get data from the sheet.
