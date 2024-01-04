@@ -5,7 +5,7 @@ from .database import ingredient_database
 from .database import recipe_database
 
 
-class Spreadsheet:
+class Wrapper:
     '''
     sheet interface functions shared between other files
     TODO better comments.
@@ -33,6 +33,12 @@ class Spreadsheet:
 
         # Find a workbook by name and open sheets
         return client.open("Shopping List")
+
+    def download_ingredients_data(self):
+        '''
+        Pull data from the ingredients sheet into a dict.
+        '''
+        self._ingredients_record = self._ingredients_sheet.get_all_records()
 
     def get_ingredient_list(self):
         # Extract the first column data from the ingredients sheet excluding header row.

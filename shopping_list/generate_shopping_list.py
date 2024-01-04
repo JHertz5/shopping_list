@@ -1,12 +1,12 @@
 import os
 
-from . import spreadsheet
+import spreadsheet
 from . import push_file
 from . import report
 
 
 def generate_shopping_list():
-    sheets = spreadsheet.Spreadsheet()
+    sheets = spreadsheet.wrapper.Wrapper()
     print('data connected')
 
     # Extract data from ingredients sheet and construct ingredients database
