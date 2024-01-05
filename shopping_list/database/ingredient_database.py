@@ -41,13 +41,13 @@ class ingredientDatabase:
 
         self._ingredient_dict[ingredient_name].incr_quantity()
 
-    def add_new_ingredient(self, ingredient_name, groups_dict={}):
-        self._ingredient_dict[ingredient_name] = ingredient.ingredient(ingredient_name, groups_dict)
+    def add_new_ingredient(self, ingredient_name, group='none'):
+        self._ingredient_dict[ingredient_name] = ingredient.Ingredient(ingredient_name, group=group)
 
     def get_non_zero_quantity_ingredient_name_list(self):
         ingredient_name_list = []
         for ingredient_name, ingredient_obj in self._ingredient_dict.items():
-            if ingredient_obj.get_quantity() > 0:
+            if ingredient_obj.quantity > 0:
                 ingredient_name_list.append(ingredient_name)
         return ingredient_name_list
 
@@ -56,11 +56,11 @@ class ingredientDatabase:
         ingredient_name_list = self.get_non_zero_quantity_ingredient_name_list()
         ingredient_quantity_dict = {}
         for ingredient_name in ingredient_name_list:
-            ingredient_quantity_dict[ingredient_name] = self._ingredient_dict[ingredient_name].get_quantity()
+            ingredient_quantity_dict[ingredient_name] = self._ingredient_dict[ingredient_name].quantity
         return ingredient_quantity_dict
 
     def get_non_zero_quantity_ingredient_dict(self):
         non_zero_quantity_ingredient_dict = {
-            x: self._ingredient_dict[x] for x in self._ingredient_dict if self._ingredient_dict[x].get_quantity() > 0
+            x: self._ingredient_dict[x] for x in self._ingredient_dict if self._ingredient_dict[x].quantity > 0
         }
         return non_zero_quantity_ingredient_dict
