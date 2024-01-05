@@ -1,3 +1,4 @@
+from . import item
 from . import ingredient
 from . import recipe
 

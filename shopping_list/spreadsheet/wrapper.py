@@ -72,8 +72,11 @@ class Wrapper:
     def get_ingredient_list(self):
         return data.get_ingredient_list(self._ingredients_sheet_data)
 
-    def get_ingredient_sheet_data(self):
-        return data.get_ingredient_sheet_data(self._ingredients_sheet_data)
+    def get_ingredient_grouping_options(self):
+        return data.get_ingredient_grouping_options(self._ingredients_sheet_data)
+
+    def get_ingredient_sheet_data(self, grouping_selection):
+        return data.get_ingredient_sheet_data(self._ingredients_sheet_data, grouping_selection)
 
     def get_recipe_sheet_data(self):
         return data.get_recipe_sheet_data(self.recipes_sheet_data)
