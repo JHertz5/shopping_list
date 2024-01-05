@@ -22,9 +22,9 @@ def write_report(filename, recipe_quantity_dict, ingredient_dict, ingredient_gro
 
     # Add ingredients to the file.
     for ingredient_name, ingredient_obj in ingredient_dict.items():
-        ingredient_str = '{} ({})'.format(ingredient_name, ingredient_obj.get_quantity())
-        ingredient_group = ingredient_obj.get_group(ingredient_grouping_method)
-        line_string = _generate_line(ingredient_str, ingredient_group)
+        ingredient_str = '{} ({})'.format(ingredient_name, ingredient_obj.quantity)
+        ingredient_group = ingredient_obj.group
+        line_string = _generate_line(ingredient_str, str(ingredient_group))
         write_string_list.append(line_string)
 
     # Write the lines to the file.
