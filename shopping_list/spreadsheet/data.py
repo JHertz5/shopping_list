@@ -40,8 +40,8 @@ def get_recipe_sheet_data(recipe_data):
 
 
 def get_input_sheet_data(input_sheet_data):
-    meals_to_buy_list = input_sheet_data['Meals To Buy']
+    recipes_to_buy_list = input_sheet_data['Meals To Buy']
     exclusions_list = input_sheet_data['Exclusions']
     inclusions_list = input_sheet_data['Inclusions']
 
-    return meals_to_buy_list, exclusions_list, inclusions_list
+    return recipes_to_buy_list, exclusions_list, inclusions_list

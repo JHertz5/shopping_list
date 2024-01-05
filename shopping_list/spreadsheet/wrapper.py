@@ -63,8 +63,8 @@ class Wrapper:
             column_data = [x for x in column[1:] if x]
             self.input_sheet_data[column_heading] = column_data
 
-    def add_new_meal_to_buy(self, meals_to_buy_list, new_recipe_name):
-        new_recipe_row = len(meals_to_buy_list) + 1
+    def add_new_recipe_to_buy(self, recipes_to_buy_list, new_recipe_name):
+        new_recipe_row = len(recipes_to_buy_list) + 1
         # TODO magic number
         new_recipe_col = 1
         self._input_sheet.update_cell(new_recipe_row, new_recipe_col, new_recipe_name)
