@@ -63,14 +63,17 @@ def suggest_recipe():
     print('data connected')
 
     # Extract data from ingredient sheet.
+    sheets.download_ingredients_data()
     ingredient_list = sheets.get_ingredient_list()
     print('ingredients retrieved')
 
     # Extract data from recipes sheet.
+    sheets.download_recipe_data()
     recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
     # Extract data from the input sheet.
+    sheets.download_input_data()
     meals_to_buy_list = sheets.get_input_sheet_data()
     print('input retrieved')
 

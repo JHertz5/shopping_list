@@ -1,6 +1,6 @@
 import os
 
-import spreadsheet
+from . import spreadsheet
 from . import push_file
 from . import report
 
@@ -10,6 +10,7 @@ def generate_shopping_list():
     print('data connected')
 
     # Extract data from ingredients sheet and construct ingredients database
+    sheets.download_ingredients_data()
     ingredients, grouping_options = sheets.get_ingredient_sheet_data()
     print('ingredients retrieved')
 
@@ -40,6 +41,7 @@ def generate_shopping_list():
     print('\t{} selected\n'.format(grouping_selection))
 
     # Extract data from recipes sheet.
+    sheets.download_recipe_data()
     recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
@@ -48,6 +50,7 @@ def generate_shopping_list():
     while not user_input_finalised:
 
         # Extract data from the input sheet.
+        sheets.download_input_data()
         meals_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
         print('input retrieved')
 
