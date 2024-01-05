@@ -74,7 +74,7 @@ def suggest_recipe():
 
     # Extract data from the input sheet.
     sheets.download_input_data()
-    meals_to_buy_list = sheets.get_input_sheet_data()
+    recipes_to_buy_list = sheets.get_input_sheet_data()
     print('input retrieved')
 
     search_complete = False
@@ -86,5 +86,5 @@ def suggest_recipe():
             (new_recipe, search_complete) = select_recipe(search_results)
 
     if new_recipe != '':
-        sheets.add_new_meal_to_buy(meals_to_buy_list, new_recipe)
+        sheets.add_new_recipe_to_buy(recipes_to_buy_list, new_recipe)
         print('{} written to spreadsheet'.format(new_recipe))

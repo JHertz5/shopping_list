@@ -53,11 +53,11 @@ def generate_shopping_list():
 
         # Extract data from the input sheet.
         sheets.download_input_data()
-        meals_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
+        recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
         print('input retrieved')
 
-        # Update the quantities in the recipe database, based on the meals to be bought.
-        recipes.incr_quantities_for_list_of_irecipes(meals_to_buy_list)
+        # Update the quantities in the recipe database, based on the recipes to be bought.
+        recipes.incr_quantities_for_list_of_irecipes(recipes_to_buy_list)
 
         # Update the quantities in the ingredients database, based on the recipe quantities.
         recipe_ingredient_list = recipes.get_non_zero_quantity_recipe_ingredient_list()
