@@ -5,7 +5,7 @@
 import re
 import webbrowser
 
-from . import spreadsheet
+from .spreadsheet import wrapper
 
 
 def get_all_recipe_urls(sheet):
@@ -51,7 +51,7 @@ def select_recipe(input_recipes):
 
 
 def get_recipe_urls():
-    sheets = spreadsheet._open_spreadsheet()
+    sheets = wrapper._open_spreadsheet()
     print('data connected')
 
     # get list of input recipes
