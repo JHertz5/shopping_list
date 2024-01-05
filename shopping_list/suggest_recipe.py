@@ -1,6 +1,6 @@
 ''' function to suggest recipe and add it to input '''
 
-from . import spreadsheet
+from .spreadsheet import wrapper
 
 
 def recipe_search(ingredient_list, recipes):
@@ -59,18 +59,21 @@ def select_recipe(search_results):
 
 
 def suggest_recipe():
-    sheets = spreadsheet.Spreadsheet()
+    sheets = wrapper.Wrapper()
     print('data connected')
 
     # Extract data from ingredient sheet.
+    sheets.download_ingredients_data()
     ingredient_list = sheets.get_ingredient_list()
     print('ingredients retrieved')
 
     # Extract data from recipes sheet.
+    sheets.download_recipe_data()
     recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
     # Extract data from the input sheet.
+    sheets.download_input_data()
     meals_to_buy_list = sheets.get_input_sheet_data()
     print('input retrieved')
 
