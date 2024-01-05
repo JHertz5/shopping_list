@@ -9,10 +9,8 @@ def generate_shopping_list():
     sheets = spreadsheet.wrapper.Wrapper()
     print('data connected')
 
-    # Extract data from ingredients sheet and construct ingredients database
     sheets.download_ingredients_data()
-    ingredients, grouping_options = sheets.get_ingredient_sheet_data()
-    print('ingredients retrieved')
+    grouping_options = sheets.get_ingredient_grouping_options()
 
     # Get user's grouping selection.
     input_valid = False
@@ -39,6 +37,10 @@ def generate_shopping_list():
     # Convert result from int to string to use as key.
     grouping_selection = grouping_options[grouping_selection_int]
     print('\t{} selected\n'.format(grouping_selection))
+
+    # Extract data from ingredients sheet and construct ingredients database
+    ingredients = sheets.get_ingredient_sheet_data(grouping_selection)
+    print('ingredients retrieved')
 
     # Extract data from recipes sheet.
     sheets.download_recipe_data()
