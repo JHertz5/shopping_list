@@ -1,7 +1,7 @@
 from . import item
 
 
-class ingredientDatabase:
+class ItemDatabase:
     '''
     TODO comment
     '''
