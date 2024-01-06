@@ -38,4 +38,3 @@ class TestItem(unittest.TestCase):
         test_item.quantity = 5
         test_item.reset_quantity()
         self.assertEqual(test_item.quantity, 0)
-

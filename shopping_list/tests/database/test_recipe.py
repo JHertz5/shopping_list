@@ -5,6 +5,7 @@ from shopping_list.database import recipe
 test_ingredient_list = ['Apples', 'Bananas', 'Orange']
 test_ingredient_str = test_ingredient_list[0]
 
+
 class TestRecipe(unittest.TestCase):
 
     def test_recipe_exists(self):
