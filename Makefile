@@ -1,4 +1,5 @@
 init:
 	pip install -r requirements.txt
 
-.PHONY: init
+test:
+	python -m unittest
