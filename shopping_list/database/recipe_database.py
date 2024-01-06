@@ -4,7 +4,7 @@ from .item_database import ItemDatabase
 
 class RecipeDatabase(ItemDatabase):
     '''
-    TODO comment
+    A database of recipes on a shopping list.
     '''
 
     def insert(self, recipe_name, ingredient_list=[]):

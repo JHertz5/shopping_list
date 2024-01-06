@@ -3,7 +3,7 @@ from . import item
 
 class ItemDatabase:
     '''
-    TODO comment
+    A database of items on a shopping list.
     '''
 
     def __init__(self):
