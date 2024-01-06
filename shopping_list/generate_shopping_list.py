@@ -57,15 +57,19 @@ def generate_shopping_list():
         print('input retrieved')
 
         # Update the quantities in the recipe database, based on the recipes to be bought.
-        recipes.incr_quantities_for_list_of_irecipes(recipes_to_buy_list)
+        for recipe_name in recipes_to_buy_list:
+            recipes.incr_recipe_quantity(recipe_name)
 
         # Update the quantities in the ingredients database, based on the recipe quantities.
         recipe_ingredient_list = recipes.get_non_zero_quantity_recipe_ingredient_list()
-        ingredients.incr_quantities_for_list_of_ingredients(recipe_ingredient_list)
+        for ingredient_name in recipe_ingredient_list:
+            ingredients.incr_ingredient_quantity(ingredient_name)
         # Update the quantities in the ingredients database, based on the exclusions.
-        ingredients.reset_quantities_for_list_of_ingredients(exclusions_list)
+        for ingredient_name in exclusions_list:
+            ingredients.reset_ingredient_quantity(ingredient_name)
         # Update the quantities in the ingredients database, based on the inclusions.
-        ingredients.incr_quantities_for_list_of_ingredients(inclusions_list)
+        for ingredient_name in inclusions_list:
+            ingredients.incr_ingredient_quantity(ingredient_name)
 
         report.preview.print_report(
             recipes.get_non_zero_quantity_recipe_quanitity_dict(),
