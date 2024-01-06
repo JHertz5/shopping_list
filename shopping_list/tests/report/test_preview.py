@@ -16,14 +16,15 @@ class TestPreview(unittest.TestCase):
             'ingredient2': 2,
             'ingredient3': 3
         }
-        expected_string = '\nRecipes:\n\t' \
-            + 'recipe1 (1)\n\t' \
-            + 'recipe2 (2)\n\t' \
-            + 'recipe3 (3)' \
-            + '\ningredients:\n\t' \
-            + 'ingredient1 (1)\n\t' \
-            + 'ingredient2 (2)\n\t' \
-            + 'ingredient3 (3)' \
-            + '\n'
         actual_string = preview._generate_report(test_recipe_dict, test_ingredient_dict)
+
+        expected_string = '\nRecipes:\n' \
+            + '\trecipe1 (1)\n' \
+            + '\trecipe2 (2)\n' \
+            + '\trecipe3 (3)\n' \
+            + 'ingredients:\n' \
+            + '\tingredient1 (1)\n' \
+            + '\tingredient2 (2)\n' \
+            + '\tingredient3 (3)\n'
+
         self.assertEqual(actual_string, expected_string)
