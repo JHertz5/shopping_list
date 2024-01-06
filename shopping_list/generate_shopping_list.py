@@ -90,8 +90,7 @@ def generate_shopping_list():
                 report.checklist.write_report(
                     checklist_filename,
                     recipes.get_quantity_dict_of_selected(),
-                    ingredients.get_dict_of_selected(),
-                    grouping_selection
+                    ingredients.get_dict_of_selected()
                 )
                 print('\t{} generated'.format(checklist_filename))
 
