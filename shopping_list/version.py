@@ -1,6 +1,14 @@
 import os
 import subprocess
 
+# This dict is the definition of the version number.
+version_dict = {
+    'major': 3,
+    'minor': 0,
+    'patch': 0
+}
+version_string = '.'.join(str(c) for c in version_dict.values())
+
 
 def print_version_info():
 
@@ -11,14 +19,6 @@ def print_version_info():
 
 
 def get_version_info():
-
-    # This dict is the definition of the version number.
-    version_dict = {
-        'major': 3,
-        'minor': 0,
-        'patch': 0
-    }
-    version_string = '.'.join(str(c) for c in version_dict.values())
 
     if reporting_from_zip_file():
         return version_string + '+zip.file', 'Unknown.  Installed via zip file.'
