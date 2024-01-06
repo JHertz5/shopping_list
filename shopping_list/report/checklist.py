@@ -17,6 +17,7 @@ def write_report(filename, recipe_quantity_dict, ingredient_dict, ingredient_gro
     # Add recipes to file.
     for recipe_name, recipe_quantity in recipe_quantity_dict.items():
         recipe_str = '{} ({})'.format(recipe_name, recipe_quantity)
+        # TODO get group from recipe instance
         line_string = _generate_line(recipe_str, 'recipes')
         write_string_list.append(line_string)
 
