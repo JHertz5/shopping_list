@@ -1,4 +1,4 @@
-from . import ingredient
+from . import item
 
 
 class ingredientDatabase:
@@ -28,7 +28,7 @@ class ingredientDatabase:
         self._ingredient_dict[ingredient_name].incr_quantity()
 
     def add_new_ingredient(self, ingredient_name, group='none'):
-        self._ingredient_dict[ingredient_name] = ingredient.Ingredient(group=group)
+        self._ingredient_dict[ingredient_name] = item.Item(group=group)
 
     def get_non_zero_quantity_ingredient_name_list(self):
         ingredient_name_list = []
