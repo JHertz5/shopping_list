@@ -6,7 +6,6 @@ class Item:
     '''
     A generic class for a item in a shopping list database.
     '''
-    name: str
     quantity: int = 0
 
     def incr_quantity(self):

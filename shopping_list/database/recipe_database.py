@@ -20,7 +20,7 @@ class RecipeDatabase:
         self._recipe_dict[recipe_name].incr_quantity()
 
     def add_new_recipe(self, recipe_name, ingredient_list=[]):
-        self._recipe_dict[recipe_name] = recipe.Recipe(recipe_name, ingredient_list=ingredient_list)
+        self._recipe_dict[recipe_name] = recipe.Recipe(ingredient_list=ingredient_list)
 
     def get_non_zero_quantity_recipe_name_list(self):
         recipe_name_list = []
