@@ -1,51 +1,21 @@
 from . import recipe
+from .item_database import ItemDatabase
 
 
-class RecipeDatabase:
+class RecipeDatabase(ItemDatabase):
     '''
     TODO comment
     '''
 
-    def __init__(self, recipe_dict={}):
-        # Validate and assign initial attribute values.
-        assert isinstance(recipe_dict, dict)
-        self._recipe_dict = recipe_dict
-
-    def incr_recipe_quantity(self, recipe_name):
-        assert isinstance(recipe_name, str)
-
-        if not recipe_name in self._recipe_dict.keys():
-            self.add_new_recipe(recipe_name)
-
-        self._recipe_dict[recipe_name].incr_quantity()
-
-    def add_new_recipe(self, recipe_name, ingredient_list=[]):
-        self._recipe_dict[recipe_name] = recipe.Recipe(ingredient_list=ingredient_list)
-
-    def get_non_zero_quantity_recipe_name_list(self):
-        recipe_name_list = []
-        for recipe_name, recipe_obj in self._recipe_dict.items():
-            if recipe_obj.quantity > 0:
-                recipe_name_list.append(recipe_name)
-        return recipe_name_list
+    def insert(self, recipe_name, ingredient_list=[]):
+        self._item_dict[recipe_name] = recipe.Recipe(ingredient_list=ingredient_list)
 
     def get_non_zero_quantity_recipe_ingredient_list(self):
-        recipe_ingredient_list = []
-        for recipe_name in self.get_non_zero_quantity_recipe_name_list():
-            recipe_ingredient_list += self._recipe_dict[recipe_name].ingredient_list
-        return recipe_ingredient_list
-
-    def get_non_zero_quantity_recipe_quanitity_dict(self):
-        # TODO I think this method is too specific. Replace with a dict of just the non-zero recipes?
-        # TODO I feel like this would be simpler if each recipe was just a dict rather than an object.
-        recipe_name_list = self.get_non_zero_quantity_recipe_name_list()
-        recipe_quantity_dict = {}
-        for recipe_name in recipe_name_list:
-            recipe_quantity_dict[recipe_name] = self._recipe_dict[recipe_name].quantity
-        return recipe_quantity_dict
+        return_list = []
+        for name in self.get_non_zero_quantity_list():
+            return_list += self._item_dict[name].ingredient_list
+        return return_list
 
     def get_recipes_containing_ingredient(self, ingredient):
-        # TODO if this was a dict of dicts, we would just do
-        # return [x for x in recipes.keys() if search_ingredient in recipes[x]]
-        recipe_list = [x for x in self._recipe_dict.keys() if self._recipe_dict[x].ingredient_is_in_recipe(ingredient)]
-        return recipe_list
+        return_list = [x for x in self._item_dict.keys() if self._item_dict[x].ingredient_is_in_recipe(ingredient)]
+        return return_list

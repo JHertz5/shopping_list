@@ -6,47 +6,39 @@ class ItemDatabase:
     TODO comment
     '''
 
-    def __init__(self, ingredient_dict={}):
-        # Validate and assign initial attribute values.
-        assert isinstance(ingredient_dict, dict)
-        self._ingredient_dict = ingredient_dict
+    def __init__(self):
+        self._item_dict = {}
 
-    def get_ingredient_dict(self):
-        return self._ingredient_dict
+    def reset_quantity(self, item_name):
+        assert isinstance(item_name, str)
+        assert item_name in self._item_dict.keys()
+        self._item_dict[item_name].reset_quantity()
 
-    def reset_ingredient_quantity(self, ingredient_name):
-        assert isinstance(ingredient_name, str)
-        assert ingredient_name in self._ingredient_dict.keys()
-        self._ingredient_dict[ingredient_name].reset_quantity()
+    def incr_quantity(self, item_name):
+        assert isinstance(item_name, str)
 
-    def incr_ingredient_quantity(self, ingredient_name):
-        assert isinstance(ingredient_name, str)
+        if not item_name in self._item_dict.keys():
+            self.insert(item_name)
 
-        if not ingredient_name in self._ingredient_dict.keys():
-            self.add_new_ingredient(ingredient_name)
+        self._item_dict[item_name].incr_quantity()
 
-        self._ingredient_dict[ingredient_name].incr_quantity()
+    def insert(self, item_name, group='none'):
+        self._item_dict[item_name] = item.Item(group=group)
 
-    def add_new_ingredient(self, ingredient_name, group='none'):
-        self._ingredient_dict[ingredient_name] = item.Item(group=group)
+    def get_non_zero_quantity_list(self):
+        return_list = []
+        for name, obj in self._item_dict.items():
+            if obj.quantity > 0:
+                return_list.append(name)
+        return return_list
 
-    def get_non_zero_quantity_ingredient_name_list(self):
-        ingredient_name_list = []
-        for ingredient_name, ingredient_obj in self._ingredient_dict.items():
-            if ingredient_obj.quantity > 0:
-                ingredient_name_list.append(ingredient_name)
-        return ingredient_name_list
+    def get_non_zero_quantity_quantity_dict(self):
+        name_list = self.get_non_zero_quantity_list()
+        return_dict = {}
+        for name in name_list:
+            return_dict[name] = self._item_dict[name].quantity
+        return return_dict
 
-    def get_non_zero_quantity_ingredient_quanitity_dict(self):
-        # TODO I feel like this would be simpler if each ingredient was just a dict rather than an object.
-        ingredient_name_list = self.get_non_zero_quantity_ingredient_name_list()
-        ingredient_quantity_dict = {}
-        for ingredient_name in ingredient_name_list:
-            ingredient_quantity_dict[ingredient_name] = self._ingredient_dict[ingredient_name].quantity
-        return ingredient_quantity_dict
-
-    def get_non_zero_quantity_ingredient_dict(self):
-        non_zero_quantity_ingredient_dict = {
-            x: self._ingredient_dict[x] for x in self._ingredient_dict if self._ingredient_dict[x].quantity > 0
-        }
-        return non_zero_quantity_ingredient_dict
+    def get_non_zero_quantity_intem_dict(self):
+        return_dict = {x: self._item_dict[x] for x in self._item_dict if self._item_dict[x].quantity > 0}
+        return return_dict

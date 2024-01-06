@@ -58,22 +58,22 @@ def generate_shopping_list():
 
         # Update the quantities in the recipe database, based on the recipes to be bought.
         for recipe_name in recipes_to_buy_list:
-            recipes.incr_recipe_quantity(recipe_name)
+            recipes.incr_quantity(recipe_name)
 
         # Update the quantities in the ingredients database, based on the recipe quantities.
         recipe_ingredient_list = recipes.get_non_zero_quantity_recipe_ingredient_list()
         for ingredient_name in recipe_ingredient_list:
-            ingredients.incr_ingredient_quantity(ingredient_name)
+            ingredients.incr_quantity(ingredient_name)
         # Update the quantities in the ingredients database, based on the exclusions.
         for ingredient_name in exclusions_list:
-            ingredients.reset_ingredient_quantity(ingredient_name)
+            ingredients.reset_quantity(ingredient_name)
         # Update the quantities in the ingredients database, based on the inclusions.
         for ingredient_name in inclusions_list:
-            ingredients.incr_ingredient_quantity(ingredient_name)
+            ingredients.incr_quantity(ingredient_name)
 
         report.preview.print_report(
-            recipes.get_non_zero_quantity_recipe_quanitity_dict(),
-            ingredients.get_non_zero_quantity_ingredient_quanitity_dict()
+            recipes.get_non_zero_quantity_quantity_dict(),
+            ingredients.get_non_zero_quantity_quantity_dict()
         )
         print('shopping list generated')
 
@@ -89,8 +89,8 @@ def generate_shopping_list():
                 checklist_filename = report.checklist.generate_timestamp_filename()
                 report.checklist.write_report(
                     checklist_filename,
-                    recipes.get_non_zero_quantity_recipe_quanitity_dict(),
-                    ingredients.get_non_zero_quantity_ingredient_dict(),
+                    recipes.get_non_zero_quantity_quantity_dict(),
+                    ingredients.get_non_zero_quantity_intem_dict(),
                     grouping_selection
                 )
                 print('\t{} generated'.format(checklist_filename))

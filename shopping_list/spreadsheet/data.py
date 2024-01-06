@@ -21,7 +21,7 @@ def get_ingredient_sheet_data(ingredients_data, grouping_selection):
         # provided separately to the ingredient class, so extract the name from the record and construct an instance of
         # the ingredient object.
         ingredient_name = record.pop('Name')
-        ingredients.add_new_ingredient(ingredient_name, record[grouping_selection])
+        ingredients.insert(ingredient_name, record[grouping_selection])
 
     return ingredients
 
@@ -34,7 +34,7 @@ def get_recipe_sheet_data(recipe_data):
         # Parse the name and the ingredients from the row to construct an instance of the recipe object.
         recipe_name = recipe_row[0]
         recipe_ingredients = [x for x in recipe_row[1:] if x != '']
-        recipes.add_new_recipe(recipe_name, recipe_ingredients)
+        recipes.insert(recipe_name, recipe_ingredients)
 
     return recipes
 
