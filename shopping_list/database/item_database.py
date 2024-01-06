@@ -25,20 +25,20 @@ class ItemDatabase:
     def insert(self, item_name, group='none'):
         self._item_dict[item_name] = item.Item(group=group)
 
-    def get_non_zero_quantity_list(self):
+    def get_names_of_selected(self):
         return_list = []
         for name, obj in self._item_dict.items():
             if obj.quantity > 0:
                 return_list.append(name)
         return return_list
 
-    def get_non_zero_quantity_quantity_dict(self):
-        name_list = self.get_non_zero_quantity_list()
+    def get_quantity_dict_of_selected(self):
+        name_list = self.get_names_of_selected()
         return_dict = {}
         for name in name_list:
             return_dict[name] = self._item_dict[name].quantity
         return return_dict
 
-    def get_non_zero_quantity_intem_dict(self):
+    def get_dict_of_selected(self):
         return_dict = {x: self._item_dict[x] for x in self._item_dict if self._item_dict[x].quantity > 0}
         return return_dict

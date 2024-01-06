@@ -61,7 +61,7 @@ def generate_shopping_list():
             recipes.incr_quantity(recipe_name)
 
         # Update the quantities in the ingredients database, based on the recipe quantities.
-        recipe_ingredient_list = recipes.get_non_zero_quantity_recipe_ingredient_list()
+        recipe_ingredient_list = recipes.get_ingredient_list_of_selected()
         for ingredient_name in recipe_ingredient_list:
             ingredients.incr_quantity(ingredient_name)
         # Update the quantities in the ingredients database, based on the exclusions.
@@ -72,8 +72,8 @@ def generate_shopping_list():
             ingredients.incr_quantity(ingredient_name)
 
         report.preview.print_report(
-            recipes.get_non_zero_quantity_quantity_dict(),
-            ingredients.get_non_zero_quantity_quantity_dict()
+            recipes.get_quantity_dict_of_selected(),
+            ingredients.get_quantity_dict_of_selected()
         )
         print('shopping list generated')
 
@@ -89,8 +89,8 @@ def generate_shopping_list():
                 checklist_filename = report.checklist.generate_timestamp_filename()
                 report.checklist.write_report(
                     checklist_filename,
-                    recipes.get_non_zero_quantity_quantity_dict(),
-                    ingredients.get_non_zero_quantity_intem_dict(),
+                    recipes.get_quantity_dict_of_selected(),
+                    ingredients.get_dict_of_selected(),
                     grouping_selection
                 )
                 print('\t{} generated'.format(checklist_filename))
