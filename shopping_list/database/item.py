@@ -4,9 +4,10 @@ from dataclasses import dataclass
 @dataclass
 class Item:
     '''
-    A generic class for a item in a shopping list database.
+    A class for an item in a shopping list.
     '''
     quantity: int = 0
+    group: str | int = 'none'
 
     def incr_quantity(self):
         self.quantity += 1
