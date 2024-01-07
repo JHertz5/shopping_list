@@ -5,11 +5,6 @@ TODO comment
 from datetime import datetime
 
 
-def generate_timestamp_filename():
-    now = datetime.now()
-    return_string = "shoppinglist_" + now.strftime('%Y%m%d%H%M%S') + ".txt"
-    return return_string
-
 def write_report(filename, recipe_quantity_dict, ingredient_dict):
     line_list = _generate_report(recipe_quantity_dict, ingredient_dict)
 
@@ -17,6 +12,7 @@ def write_report(filename, recipe_quantity_dict, ingredient_dict):
     file = open(filename, 'w')
     file.writelines(line_list)
     file.close()
+
 
 def _generate_report(recipe_quantity_dict, ingredient_dict):
     return_list = []
@@ -36,6 +32,7 @@ def _generate_report(recipe_quantity_dict, ingredient_dict):
         return_list.append(line_string)
 
     return return_list
+
 
 def _generate_line(text, group, tag_list=[]):
     # Validate inputs.

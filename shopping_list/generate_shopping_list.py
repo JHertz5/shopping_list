@@ -1,11 +1,9 @@
-import os
 
 from . import spreadsheet
-from . import push_file
 from . import report
 
 
-def generate_shopping_list():
+def generate_shopping_list(checklist_filename):
     sheets = spreadsheet.wrapper.Wrapper()
     print('data connected')
 
@@ -79,37 +77,36 @@ def generate_shopping_list():
 
         input_valid = False
         while not input_valid:
-            send_list_input = input('[s]end list, [r]efresh list or [q]uit?: ')
+            write_list_input = input('[w]rite list, [r]efresh list or [q]uit?: ')
 
-            if send_list_input == 's':  # send file
+            # Write file.
+            if write_list_input == 'w':
                 input_valid = True
-                print('\tsend file selected')
+                print('\twrite file selected')
 
-                # generate checklist file
-                checklist_filename = report.checklist.generate_timestamp_filename()
+                # Generate checklist file.
                 report.checklist.write_report(
                     checklist_filename,
                     recipes.get_quantity_dict_of_selected(),
                     ingredients.get_dict_of_selected()
                 )
-                print('\t{} generated'.format(checklist_filename))
+                print('\tshopping list written to ' + checklist_filename)
 
-                # push file
-                push_file.push_file(checklist_filename)
-                print('\tfile pushed')
+                # End script.
+                user_input_finalised = True
 
-                os.remove(checklist_filename)  # delete file
-
-                user_input_finalised = True  # end script
-
-            elif send_list_input == 'r':  # refresh file
+            # Refresh file.
+            elif write_list_input == 'r':
                 input_valid = True
                 print('\trefresh file selected')
-                user_input_finalised = False  # restart script
+                # Restart script.
+                user_input_finalised = False
 
-            elif send_list_input == 'q':  # quit
+            # Quit.
+            elif write_list_input == 'q':
                 input_valid = True
                 print('\tquit selected')
-                user_input_finalised = True  # end script
+                # End script.
+                user_input_finalised = True
             else:
-                print('{} is not valid input'.format(send_list_input))
+                print('{} is not valid input'.format(write_list_input))
