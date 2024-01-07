@@ -32,27 +32,16 @@ def parse_command_line_args():
             '''
     )
 
-    parser.add_argument('-g', '--generate_list', default=False, action='store_true', help='Generate a shopping list.')
-    parser.add_argument('-s', '--suggest_recipe', default=False, action='store_true', help='Suggest a recipe.')
-    parser.add_argument('-r', '--recipe_url', default=False, action='store_true', help='Get the URL of a recipe.')
-    parser.add_argument('-v', '--version', default=False, action='store_true', help='Display version information.')
+    exclsuive_group = parser.add_mutually_exclusive_group()
+    exclsuive_group.add_argument('-g', '--generate_list', default=False, action='store_true', help='Generate a shopping list.')
+    exclsuive_group.add_argument('-s', '--suggest_recipe', default=False, action='store_true', help='Suggest a recipe.')
+    exclsuive_group.add_argument('-r', '--recipe_url', default=False, action='store_true', help='Get the URL of a recipe.')
+    exclsuive_group.add_argument('-v', '--version', default=False, action='store_true', help='Display version information.')
 
     args = parser.parse_args()
-
-    validate_args(args)
 
     if len(sys.argv) == 1:
         parser.print_usage()
         sys.exit()
     else:
         return args
-
-
-def validate_args(args):
-    '''
-    Check that none of the mutually exclusive arguments are simulateneously enabled.
-    '''
-    num_arguments_true = [args.generate_list, args.suggest_recipe, args.recipe_url, args.version].count(True)
-    if num_arguments_true > 1:
-        print('ERROR: The --generate_list, --suggest_recipe, --recipe_url, and --version arguments are mutually exclusive.')
-        sys.exit(1)
