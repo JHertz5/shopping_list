@@ -1,4 +1,6 @@
 
+import sys
+
 from . import spreadsheet
 from . import report
 from . import utils
@@ -24,33 +26,39 @@ def generate_shopping_list(checklist_filename):
     recipes = sheets.get_recipe_sheet_data()
     print('recipes retrieved')
 
-    # TODO change this to a function rather than a loop, with top-level control?
     user_input_finalised = False
     while not user_input_finalised:
 
-        # Extract data from the input sheet.
-        sheets.download_input_data()
-        recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
-        print('input retrieved')
+        recipes, ingredients = generate_shopping_list_data(sheets, recipes, ingredients)
 
-        # Update the quantities in the recipe database, based on the recipes to be bought.
-        recipes = update_recipe_quantities(recipes, recipes_to_buy_list)
-        recipe_ingredient_list = recipes.get_ingredient_list_of_selected()
+        write_list_input = get_user_action_selection(recipes, ingredients, checklist_filename)
+        user_input_finalised = write_list_input in ['w', 'q']
 
-        # Update the quantities in the recipe database, based on the recipes to be bought.
-        ingredients = update_ingredient_quantities(
-            ingredients, recipe_ingredient_list, exclusions_list, inclusions_list
-        )
+        match write_list_input:
+            # Write file.
+            case'w':
+                print('\twrite file selected')
+                # Generate checklist file.
+                report.checklist.write_report(
+                    checklist_filename,
+                    recipes.get_quantity_dict_of_selected(),
+                    ingredients.get_dict_of_selected()
+                )
+                print('shopping list written to ' + checklist_filename)
 
-        report.preview.print_report(
-            recipes.get_quantity_dict_of_selected(),
-            ingredients.get_quantity_dict_of_selected()
-        )
-        print('shopping list generated')
+            # Refresh file.
+            case 'r':
+                print('\trefresh file selected')
+                # Reset the quantities of each shopping list item.
+                recipes.reset_quantites()
+                ingredients.reset_quantites()
 
-        user_input_finalised = get_user_action_selection(recipes, ingredients, checklist_filename)
+            # Quit.
+            case 'q':
+                print('\tquit selected')
 
     return
+
 
 def get_user_grouping_selection(grouping_options):
 
@@ -75,6 +83,29 @@ def get_user_grouping_selection(grouping_options):
     return grouping_selection
 
 
+def generate_shopping_list_data(sheets, recipes, ingredients):
+    # Extract data from the input sheet.
+    sheets.download_input_data()
+    recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
+    print('input retrieved')
+
+    # Update the quantities in the recipe database, based on the recipes to be bought.
+    recipes = update_recipe_quantities(recipes, recipes_to_buy_list)
+    recipe_ingredient_list = recipes.get_ingredient_list_of_selected()
+
+    # Update the quantities in the recipe database, based on the recipes to be bought.
+    ingredients = update_ingredient_quantities(
+        ingredients, recipe_ingredient_list, exclusions_list, inclusions_list
+    )
+
+    report.preview.print_report(
+        recipes.get_quantity_dict_of_selected(),
+        ingredients.get_quantity_dict_of_selected()
+    )
+    print('shopping list generated')
+    return recipes, ingredients
+
+
 def update_recipe_quantities(recipes, recipes_to_buy_list):
     # Update the quantities in the recipe database, based on the recipes to be bought.
     for recipe_name in recipes_to_buy_list:
@@ -94,6 +125,7 @@ def update_ingredient_quantities(ingredients, recipe_ingredient_list, exclusions
         ingredients.incr_quantity(ingredient_name)
     return ingredients
 
+
 def get_user_action_selection(recipes, ingredients, checklist_filename):
 
     user_input_is_valid = False
@@ -101,29 +133,6 @@ def get_user_action_selection(recipes, ingredients, checklist_filename):
         write_list_input = input('[w]rite list, [r]efresh list or [q]uit?: ')
         user_input_is_valid = write_list_input in ['w', 'r', 'q']
         if not user_input_is_valid:
-            print('\tError: invalid input ' + write_list_input)
+            print('Error: invalid input ' + write_list_input)
 
-    match write_list_input:
-        # Write file.
-        case'w':
-            print('\twrite file selected')
-            # Generate checklist file.
-            report.checklist.write_report(
-                checklist_filename,
-                recipes.get_quantity_dict_of_selected(),
-                ingredients.get_dict_of_selected()
-            )
-            print('shopping list written to ' + checklist_filename)
-
-        # Refresh file.
-        case 'r':
-            print('\trefresh file selected')
-            # Reset the quantities of each shopping list item.
-            recipes.reset_quantites()
-            ingredients.reset_quantites()
-
-        # Quit.
-        case 'q':
-            print('\tquit selected')
-
-    return write_list_input in ['w', 'q']
+    return write_list_input
