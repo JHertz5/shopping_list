@@ -21,8 +21,8 @@ def main():
 
     args = command_line_args.parse_command_line_args()
 
-    if args.generate_list:
-        generate_shopping_list.generate_shopping_list()
+    if args.generate_list != None:
+        generate_shopping_list.generate_shopping_list(args.generate_list)
     elif args.suggest_recipe:
         suggest_recipe.suggest_recipe()
     elif args.recipe_url:
