@@ -4,7 +4,7 @@ import subprocess
 # This dict is the definition of the version number.
 version_dict = {
     'major': 3,
-    'minor': 2,
+    'minor': 3,
     'patch': 0
 }
 version_string = '.'.join(str(c) for c in version_dict.values())
