@@ -14,6 +14,10 @@ class ItemDatabase:
         assert item_name in self._item_dict.keys()
         self._item_dict[item_name].reset_quantity()
 
+    def reset_quantites(self):
+        for item_name in self._item_dict.keys():
+            self._item_dict[item_name].reset_quantity()
+
     def incr_quantity(self, item_name):
         assert isinstance(item_name, str)
 
