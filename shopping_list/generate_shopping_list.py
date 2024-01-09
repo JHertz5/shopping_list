@@ -29,15 +29,21 @@ def generate_shopping_list(checklist_filename):
     user_input_finalised = False
     while not user_input_finalised:
 
-        recipes, ingredients = generate_shopping_list_data(sheets, recipes, ingredients)
+        # Extract data from the input sheet.
+        sheets.download_input_data()
+        recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
+        print('input retrieved')
+        recipes, ingredients = generate_shopping_list_data(
+            recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients
+        )
 
-        write_list_input = get_user_action_selection(recipes, ingredients, checklist_filename)
+        write_list_input = get_user_action_selection()
         user_input_finalised = write_list_input in ['w', 'q']
 
         match write_list_input:
             # Write file.
             case'w':
-                print('\twrite file selected')
+                print('\twrite list selected')
                 # Generate checklist file.
                 report.checklist.write_report(
                     checklist_filename,
@@ -48,7 +54,7 @@ def generate_shopping_list(checklist_filename):
 
             # Refresh file.
             case 'r':
-                print('\trefresh file selected')
+                print('\trefresh list selected')
                 # Reset the quantities of each shopping list item.
                 recipes.reset_quantites()
                 ingredients.reset_quantites()
@@ -57,6 +63,7 @@ def generate_shopping_list(checklist_filename):
             case 'q':
                 print('\tquit selected')
 
+    print('exiting')
     return
 
 
@@ -75,7 +82,7 @@ def get_user_grouping_selection(grouping_options):
 
         grouping_selection_str = input('pick sort method: ')
         # Check validity of selection.
-        user_input_is_valid = utils.input_is_valid_int(grouping_selection_str, max=max_grouping_selection)
+        user_input_is_valid = utils.string_is_valid_int(grouping_selection_str, max=max_grouping_selection)
 
     # Convert result from int to string to use as key.
     grouping_selection = grouping_options[int(grouping_selection_str)]
@@ -83,11 +90,7 @@ def get_user_grouping_selection(grouping_options):
     return grouping_selection
 
 
-def generate_shopping_list_data(sheets, recipes, ingredients):
-    # Extract data from the input sheet.
-    sheets.download_input_data()
-    recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
-    print('input retrieved')
+def generate_shopping_list_data(recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients):
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
     recipes = update_recipe_quantities(recipes, recipes_to_buy_list)
@@ -126,7 +129,7 @@ def update_ingredient_quantities(ingredients, recipe_ingredient_list, exclusions
     return ingredients
 
 
-def get_user_action_selection(recipes, ingredients, checklist_filename):
+def get_user_action_selection():
 
     user_input_is_valid = False
     while not user_input_is_valid:
