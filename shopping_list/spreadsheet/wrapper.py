@@ -49,18 +49,13 @@ class Wrapper:
         '''
         Pull data from the inputs sheet into a list of lists.
         '''
-        self.input_list = self._input_sheet.get_values()
-        # TODO get this into the relevant lists.
+        self.input_list = self._input_sheet.get_values(major_dimension="COLUMNS")
         # Get input config data.
         self.input_sheet_data = {}
-        number_of_columns = 4
-        # TODO surely this can be improved? Use get, or get_values instead? Issue #32.
-        for column_index in range(1, number_of_columns):
-            # Pull column data into list.
-            column = self._input_sheet.col_values(column_index)
+        for column in self.input_list:
             column_heading = column[0]
             # Remove any empty strings with list comprehension.
-            column_data = [x for x in column[1:] if x]
+            column_data = list(filter(None, column[1:]))
             self.input_sheet_data[column_heading] = column_data
 
     def add_new_recipe_to_buy(self, recipes_to_buy_list, new_recipe_name):
