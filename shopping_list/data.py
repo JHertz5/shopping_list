@@ -4,6 +4,10 @@ from .database import recipe_database
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+items_sheet_name = 'Items'
+recipes_sheet_name = 'Recipes'
+input_sheet_name = 'Input'
+
 
 class Data:
     '''
@@ -11,46 +15,32 @@ class Data:
     TODO better comments.
     '''
 
-    def __init__(self, token_filename, sheet_name):
-        self._workbook = self._open_spreadsheet(token_filename, sheet_name)
-        # Open the ingredient sheet.
-        self._ingredients_sheet = self._workbook.worksheet('Items')
-        # Open the recipes sheet.
-        self._recipes_sheet = self._workbook.worksheet('Recipes')
-        # Open the input sheet.
-        self._input_sheet = self._workbook.worksheet('Input')
+    def __init__(self, spreadsheet):
+        self.download_ingredients_data(spreadsheet)
+        self.download_recipes_data(spreadsheet)
+        self.download_input_data(spreadsheet)
 
-    def _open_spreadsheet(self, token_filename, sheet_name):
-        # use creds to create a client to interact with the Google Drive API
-        scope = [
-            'https://spreadsheets.google.com/feeds',
-            'https://www.googleapis.com/auth/drive'
-        ]
-        # TODO put filename in config file
-        creds = ServiceAccountCredentials.from_json_keyfile_name(
-            token_filename, scope)
-        client = gspread.authorize(creds)
-
-        # Find a workbook by name and open sheets
-        return client.open(sheet_name)
-
-    def download_ingredients_data(self):
+    def download_ingredients_data(self, spreadsheet):
         '''
         Pull data from the ingredients sheet into a list of dicts.
         '''
-        self._ingredients_sheet_data = self._ingredients_sheet.get_all_records()
+        self._ingredients_sheet_data = spreadsheet.worksheet(items_sheet_name).get_all_records()
+        print('ingredients retrieved')
+        return
 
-    def download_recipe_data(self):
+    def download_recipes_data(self, spreadsheet):
         '''
         Pull data from the recipes sheet into a list of lists.
         '''
-        self._recipes_sheet_data = self._recipes_sheet.get_values()
+        self._recipes_sheet_data = spreadsheet.worksheet(recipes_sheet_name).get_values()
+        print('recipes retrieved')
+        return
 
-    def download_input_data(self):
+    def download_input_data(self, spreadsheet):
         '''
         Pull data from the inputs sheet into a list of lists.
         '''
-        self.input_list = self._input_sheet.get_values(major_dimension="COLUMNS")
+        self.input_list = spreadsheet.worksheet(input_sheet_name).get_values(major_dimension="COLUMNS")
         # Get input config data.
         self._input_sheet_data = {}
         for column in self.input_list:
@@ -58,6 +48,8 @@ class Data:
             # Remove any empty strings with list comprehension.
             column_data = list(filter(None, column[1:]))
             self._input_sheet_data[column_heading] = column_data
+        print('input retrieved')
+        return
 
     def add_new_recipe_to_buy(self, recipes_to_buy_list, new_recipe_name):
         new_recipe_row = len(recipes_to_buy_list) + 1
@@ -80,7 +72,11 @@ class Data:
             # provided separately to the ingredient class, so extract the name from the record and construct an instance of
             # the ingredient object.
             ingredient_name = record.pop('Name')
-            ingredients.insert(ingredient_name, record[grouping_selection])
+            if grouping_selection == 'Unordered':
+                group = 0
+            else:
+                group = record[grouping_selection]
+            ingredients.insert(ingredient_name, group)
 
         return ingredients
 
@@ -102,3 +98,21 @@ class Data:
         inclusions_list = self._input_sheet_data['Inclusions']
 
         return recipes_to_buy_list, exclusions_list, inclusions_list
+
+
+def open_spreadsheet(token_filename, sheet_name):
+    # use creds to create a client to interact with the Google Drive API
+    scope = [
+        'https://spreadsheets.google.com/feeds',
+        'https://www.googleapis.com/auth/drive'
+    ]
+    # TODO put filename in config file
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        token_filename, scope)
+    client = gspread.authorize(creds)
+
+
+    # Find a spreadsheet by name and open it.
+    spreadsheet = client.open(sheet_name)
+    print('data connected')
+    return spreadsheet

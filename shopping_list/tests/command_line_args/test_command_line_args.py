@@ -11,7 +11,7 @@ test_sheet_name = 'Google Sheet Title'
 token_path = os.path.join(os.path.dirname(__file__), test_token_filename)
 
 
-class testCommandLineArgs(unittest.TestCase):
+class TestCommandLineArgs(unittest.TestCase):
 
     def test_valid_recommend(self):
         '''
