@@ -36,5 +36,6 @@ jobs:
         run: |
           gh release create "$tag" \
             --title="$tag" \
+            --target main
             --generate-notes
             --draft
