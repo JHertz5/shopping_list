@@ -29,11 +29,10 @@ jobs:
       - name: Get repo version
         run: echo repo_version=$(./shopping_list/version.py) >> "$GITHUB_ENV"
 
-      - name: Print variables
-        run: |
-          printf 'git describe = %s\n' $git_describe"
-          printf 'repo version = %s\n' $repo_version"
-
       - name: Create new release
         if: ${{ ! startsWith(env.git_describe, env.repo_version) }}
-        run: echo "hello"
+        run: |
+          gh release create "$tag" \
+            --title="$tag" \
+            --generate-notes
+            --draft
