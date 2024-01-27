@@ -5,7 +5,7 @@ name: create_release
 on:
   # Triggers the workflow on push events but only for the main branch
   push:
-    # branches: [ main ]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,12 +23,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Get the version number of the latest tag
       - name: Get git describe
         run: echo git_describe=$(git describe --tags) >> "$GITHUB_ENV"
 
+      # Get the current version of the repository
       - name: Get repo version
         run: echo repo_version=$(./shopping_list/version.py) >> "$GITHUB_ENV"
 
+      # Create a new tagged release from the current version of the repository
       - name: Create new release
         if: ${{ ! startsWith(env.git_describe, env.repo_version) }}
         env:
@@ -38,4 +41,3 @@ jobs:
             --title="$repo_version" \
             --target main \
             --generate-notes \
-            --draft
