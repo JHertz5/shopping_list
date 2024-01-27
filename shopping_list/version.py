@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import subprocess
 
@@ -5,7 +7,7 @@ import subprocess
 version_dict = {
     'major': 3,
     'minor': 5,
-    'patch': 0
+    'patch': 1
 }
 version_string = '.'.join(str(c) for c in version_dict.values())
 
@@ -51,3 +53,7 @@ def reporting_from_git_repo():
 
 def reporting_from_zip_file():
     return not reporting_from_git_repo()
+
+if __name__ == '__main__':
+    # Print simple version number when called directly.
+    print(version_string)
