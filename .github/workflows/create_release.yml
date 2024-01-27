@@ -31,6 +31,8 @@ jobs:
 
       - name: Create new release
         if: ${{ ! startsWith(env.git_describe, env.repo_version) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$tag" \
             --title="$tag" \
