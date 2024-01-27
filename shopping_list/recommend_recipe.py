@@ -1,4 +1,4 @@
-''' function to suggest recipe and add it to input '''
+''' function to recommend recipe and add it to input '''
 
 from .spreadsheet import wrapper
 
@@ -58,8 +58,8 @@ def select_recipe(search_results):
     return new_recipe, search_complete
 
 
-def suggest_recipe():
-    sheets = wrapper.Wrapper()
+def recommend_recipe(token_filename: str, sheet_name: str):
+    sheets = wrapper.Wrapper(token_filename, sheet_name)
     print('data connected')
 
     # Extract data from ingredient sheet.

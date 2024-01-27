@@ -2,13 +2,9 @@
 
 ''' main script for user interface '''
 
-import sys
-
 from . import command_line_args
 from . import generate_shopping_list
-from . import get_recipe_urls
-from . import suggest_recipe
-from . import version
+from . import recommend_recipe
 
 
 def print_help_message(options_dict):
@@ -21,4 +17,7 @@ def main():
 
     args = command_line_args.parse_command_line_args()
 
-    generate_shopping_list.generate_shopping_list(args.output_filename, args.token_filename, args.sheet_name)
+    if args.generate_list is not None:
+        generate_shopping_list.generate_shopping_list(args.generate_list, args.token_filename, args.sheet_name)
+    elif args.recommend_recipe:
+        recommend_recipe.recommend_recipe(args.token_filename, args.sheet_name)

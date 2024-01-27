@@ -22,13 +22,19 @@ def parse_command_line_args():
         action='version',
         version=version.string_version_info())
 
-    parser.add_argument(
-        '-o',
-        '--output_filename',
-        metavar='OUTPUT_FILENAME',
+    script_selection_group = parser.add_mutually_exclusive_group(required=True)
+    script_selection_group.add_argument(
+        '-g',
+        '--generate_list',
+        metavar='LIST_FILENAME',
         type=str,
-        help='The relative path of the file in which to write the shopping list.',
-        required=True
+        help='generate a shopping list file with the given filename'
+    )
+    script_selection_group.add_argument(
+        '-r',
+        '--recommend_recipe',
+        action='store_true',
+        help='recommend recipes'
     )
 
     parser.add_argument(
@@ -36,7 +42,7 @@ def parse_command_line_args():
         '--token_filename',
         metavar='TOKEN_FILENAME',
         type=__is_valid_file,
-        help='The relative path of the file that holds the oauth token.',
+        help='the relative path of the file that holds the oauth token',
         required=True
     )
 
@@ -45,7 +51,7 @@ def parse_command_line_args():
         '--sheet_name',
         metavar='SHEET_NAME',
         type=str,
-        help='The relative name of the spreadsheet file.',
+        help='the relative name of the spreadsheet file.',
         required=True
     )
 
