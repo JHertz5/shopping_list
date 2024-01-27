@@ -3,3 +3,6 @@
 *.db
 *.pyc
 /__pycache*
+
+# Exceptions.
+!test_*.json
