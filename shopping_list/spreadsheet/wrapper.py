@@ -10,8 +10,8 @@ class Wrapper:
     TODO better comments.
     '''
 
-    def __init__(self):
-        self._workbook = self._open_spreadsheet()
+    def __init__(self, token_filename, sheet_name):
+        self._workbook = self._open_spreadsheet(token_filename, sheet_name)
         # Open the ingredient sheet.
         self._ingredients_sheet = self._workbook.worksheet('Items')
         # Open the recipes sheet.
@@ -19,7 +19,7 @@ class Wrapper:
         # Open the input sheet.
         self._input_sheet = self._workbook.worksheet('Input')
 
-    def _open_spreadsheet(self):
+    def _open_spreadsheet(self, token_filename, sheet_name):
         # use creds to create a client to interact with the Google Drive API
         scope = [
             'https://spreadsheets.google.com/feeds',
@@ -27,11 +27,11 @@ class Wrapper:
         ]
         # TODO put filename in config file
         creds = ServiceAccountCredentials.from_json_keyfile_name(
-            'Shopping List-32ab969084cf.json', scope)
+            token_filename, scope)
         client = gspread.authorize(creds)
 
         # Find a workbook by name and open sheets
-        return client.open("Shopping List")
+        return client.open(sheet_name)
 
     def download_ingredients_data(self):
         '''

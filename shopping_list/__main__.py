@@ -21,15 +21,4 @@ def main():
 
     args = command_line_args.parse_command_line_args()
 
-    if args.generate_list != None:
-        generate_shopping_list.generate_shopping_list(args.generate_list)
-    elif args.suggest_recipe:
-        suggest_recipe.suggest_recipe()
-    elif args.recipe_url:
-        get_recipe_urls.get_recipe_urls()
-    elif args.version:
-        version.print_version_info()
-
-
-if __name__ == "__main__":
-    main()
+    generate_shopping_list.generate_shopping_list(args.output_filename, args.token_filename, args.sheet_name)

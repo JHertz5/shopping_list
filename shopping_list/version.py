@@ -10,12 +10,11 @@ version_dict = {
 version_string = '.'.join(str(c) for c in version_dict.values())
 
 
-def print_version_info():
+def string_version_info():
 
     sVersion, sShaNum = get_version_info()
-    print('shopping_list version: ' + str(sVersion))
-    print('Git commit SHA: ' + str(sShaNum))
-    exit(0)
+    return_string = 'shopping_list version: ' + str(sVersion) + ', Git commit SHA: ' + str(sShaNum)
+    return return_string
 
 
 def get_version_info():
