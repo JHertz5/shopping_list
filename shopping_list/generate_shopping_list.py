@@ -1,10 +1,10 @@
-from . import spreadsheet
+from . import data
 from . import report
 from . import utils
 
 
 def generate_shopping_list(output_filename: str, token_filename: str, sheet_name: str):
-    sheets = spreadsheet.wrapper.Wrapper(token_filename, sheet_name)
+    sheets = data.Data(token_filename, sheet_name)
     print('data connected')
 
     sheets.download_ingredients_data()

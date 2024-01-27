@@ -2,7 +2,7 @@
 
 from . import utils
 
-from .spreadsheet import wrapper
+from shopping_list import data
 
 
 def recipe_search(ingredient_list, recipes):
@@ -61,7 +61,7 @@ def select_recipe(search_results):
 
 
 def recommend_recipe(token_filename: str, sheet_name: str):
-    sheets = wrapper.Wrapper(token_filename, sheet_name)
+    sheets = data.Data(token_filename, sheet_name)
     print('data connected')
 
     # Extract data from ingredient sheet.

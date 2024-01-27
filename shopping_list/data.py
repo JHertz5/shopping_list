@@ -1,10 +1,11 @@
+from .database import item_database
+from .database import recipe_database
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from . import data
 
-
-class Wrapper:
+class Data:
     '''
     sheet interface functions shared between other files
     TODO better comments.
@@ -43,7 +44,7 @@ class Wrapper:
         '''
         Pull data from the recipes sheet into a list of lists.
         '''
-        self.recipes_sheet_data = self._recipes_sheet.get_values()
+        self._recipes_sheet_data = self._recipes_sheet.get_values()
 
     def download_input_data(self):
         '''
@@ -51,12 +52,12 @@ class Wrapper:
         '''
         self.input_list = self._input_sheet.get_values(major_dimension="COLUMNS")
         # Get input config data.
-        self.input_sheet_data = {}
+        self._input_sheet_data = {}
         for column in self.input_list:
             column_heading = column[0]
             # Remove any empty strings with list comprehension.
             column_data = list(filter(None, column[1:]))
-            self.input_sheet_data[column_heading] = column_data
+            self._input_sheet_data[column_heading] = column_data
 
     def add_new_recipe_to_buy(self, recipes_to_buy_list, new_recipe_name):
         new_recipe_row = len(recipes_to_buy_list) + 1
@@ -65,16 +66,39 @@ class Wrapper:
         self._input_sheet.update_cell(new_recipe_row, new_recipe_col, new_recipe_name)
 
     def get_ingredient_list(self):
-        return data.get_ingredient_list(self._ingredients_sheet_data)
+        return [x['Name'] for x in self._ingredients_sheet_data]
 
     def get_ingredient_grouping_options(self):
-        return data.get_ingredient_grouping_options(self._ingredients_sheet_data)
+        grouping_options = list(self._ingredients_sheet_data[0].keys())[1:]
+        return grouping_options
 
     def get_ingredient_sheet_data(self, grouping_selection):
-        return data.get_ingredient_sheet_data(self._ingredients_sheet_data, grouping_selection)
+        # Construct the ingredients database.
+        ingredients = item_database.ItemDatabase()
+        for record in self._ingredients_sheet_data:
+            # The record holds the name of the ingredient and all of the groupings. The name and the groupings must be
+            # provided separately to the ingredient class, so extract the name from the record and construct an instance of
+            # the ingredient object.
+            ingredient_name = record.pop('Name')
+            ingredients.insert(ingredient_name, record[grouping_selection])
+
+        return ingredients
 
     def get_recipe_sheet_data(self):
-        return data.get_recipe_sheet_data(self.recipes_sheet_data)
+        # Construct recipes database.
+        recipes = recipe_database.RecipeDatabase()
+        for recipe_row in self._recipes_sheet_data:
+            # The row holds the name of the recipe in the first column and all of the ingredients in subsequent columns.
+            # Parse the name and the ingredients from the row to construct an instance of the recipe object.
+            recipe_name = recipe_row[0]
+            recipe_ingredients = [x for x in recipe_row[1:] if x != '']
+            recipes.insert(recipe_name, recipe_ingredients)
+
+        return recipes
 
     def get_input_sheet_data(self):
-        return data.get_input_sheet_data(self.input_sheet_data)
+        recipes_to_buy_list = self._input_sheet_data['Meals To Buy']
+        exclusions_list = self._input_sheet_data['Exclusions']
+        inclusions_list = self._input_sheet_data['Inclusions']
+
+        return recipes_to_buy_list, exclusions_list, inclusions_list
