@@ -31,5 +31,5 @@ jobs:
 
       # Run the unit tests.
       - name: Create new release
-        if: ${{ ! startsWith($env.git_describe, $env.repo_version) }}
+        if: ${{ ! startsWith(env.git_describe, env.repo_version) }}
         run: echo "hello"
