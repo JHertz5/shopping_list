@@ -1,0 +1,35 @@
+name: create_release
+
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push events but only for the main branch
+  push:
+    # branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  run_test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checkout the repository under $GITHUB_WORKSPACE, so that the job can access it
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get git describe
+        run: echo git_describe=$(git describe --tags) >> "$GITHUB_ENV"
+
+      - name: Get repo version
+        run: echo repo_version=$(./shopping_list/version.py) >> "$GITHUB_ENV"
+
+      # Run the unit tests.
+      - name: Create new release
+        if: ${{ ! startsWith($env.git_describe, $env.repo_version) }}
+        run: echo "hello"
