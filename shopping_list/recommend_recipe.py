@@ -1,5 +1,7 @@
 ''' function to recommend recipe and add it to input '''
 
+from . import utils
+
 from .spreadsheet import wrapper
 
 
@@ -8,7 +10,9 @@ def recipe_search(ingredient_list, recipes):
     input_recognised = False
     while not input_recognised:
         print('known ingredients: ' + ', '.join(ingredient_list))
-        user_input_ingredient = input('input ingredient: ')
+        user_input_ingredient = input('input ingredient or [q]uit: ')
+        if user_input_ingredient == 'q':
+            utils.quit()
         search_ingredient = user_input_ingredient.title()  # ingredients are in Title Case
 
         if search_ingredient not in ingredient_list:
@@ -31,12 +35,10 @@ def select_recipe(search_results):
         for index, recipe in enumerate(search_results):
             print('\t{} - {}'.format(index, recipe))
 
-        user_input_raw = input('select recipe to add to list or [q]uit or [n]ew search: ')
+        user_input_raw = input('select recipe to add to list or [n]ew search or [q]uit: ')
         # check user input
         if user_input_raw == 'q':
-            print('quit selected')
-            search_complete = True
-            input_valid = True
+            utils.quit()
         elif user_input_raw == 'n':
             print('new seach selected')
             search_complete = False

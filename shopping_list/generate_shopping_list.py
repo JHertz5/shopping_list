@@ -1,6 +1,3 @@
-
-import sys
-
 from . import spreadsheet
 from . import report
 from . import utils
@@ -61,7 +58,7 @@ def generate_shopping_list(output_filename: str, token_filename: str, sheet_name
 
             # Quit.
             case 'q':
-                print('\tquit selected')
+                utils.quit()
 
     print('exiting')
     return
@@ -80,7 +77,11 @@ def get_user_grouping_selection(grouping_options):
         for index, grouping_option in enumerate(grouping_options):
             print('\t{} - {}'.format(index, grouping_option))
 
-        grouping_selection_str = input('pick sort method: ')
+        grouping_selection_str = input('pick sort method, or [q]uit: ')
+
+        if grouping_selection_str == 'q':
+            utils.quit()
+
         # Check validity of selection.
         user_input_is_valid = utils.string_is_valid_int(grouping_selection_str, max=max_grouping_selection)
 

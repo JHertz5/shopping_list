@@ -1,3 +1,6 @@
+import sys
+
+
 def string_is_valid_int(input_str, max=0, min=0):
     '''
     Determine whether a string is can be converted to an int. Optional arguments to define the maximum and minimum valid
@@ -15,3 +18,11 @@ def string_is_valid_int(input_str, max=0, min=0):
         print('Error: input must be in range [{},{}]'.format(min, max))
 
     return return_bool
+
+
+def quit(exit_status=0):
+    '''
+    Gracefully exit the program.
+    '''
+    print('exiting')
+    sys.exit(exit_status)
