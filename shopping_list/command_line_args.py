@@ -3,41 +3,51 @@ import glob
 import sys
 import os
 
+from . import version
+
 
 def parse_command_line_args():
     '''
     Parse the command line arguments using argparse.
     '''
     parser = argparse.ArgumentParser(
-        prog='Shopping List',
+        prog='shopping_list',
         description='A tool for generating shopping lists from a Google Sheet.'''
     )
 
-    exclsuive_group = parser.add_mutually_exclusive_group(required=True)
-    exclsuive_group.add_argument(
-        '-g',
-        '--generate_list',
-        type=str,
-        metavar='FILENAME',
-        help='Generate a shopping list in file FILENAME.')
-    exclsuive_group.add_argument(
-        '-s',
-        '--suggest_recipe',
-        default=False,
-        action='store_true',
-        help='Suggest a recipe.')
-    exclsuive_group.add_argument(
-        '-r',
-        '--recipe_url',
-        default=False,
-        action='store_true',
-        help='Get the URL of a recipe.')
-    exclsuive_group.add_argument(
+    parser.add_argument(
         '-v',
         '--version',
         default=False,
-        action='store_true',
-        help='Display version information.')
+        action='version',
+        version=version.string_version_info())
+
+    parser.add_argument(
+        '-o',
+        '--output_filename',
+        metavar='OUTPUT_FILENAME',
+        type=str,
+        help='The relative path of the file in which to write the shopping list.',
+        required=True
+    )
+
+    parser.add_argument(
+        '-t',
+        '--token_filename',
+        metavar='TOKEN_FILENAME',
+        type=__is_valid_file,
+        help='The relative path of the file that holds the oauth token.',
+        required=True
+    )
+
+    parser.add_argument(
+        '-s',
+        '--sheet_name',
+        metavar='SHEET_NAME',
+        type=str,
+        help='The relative name of the spreadsheet file.',
+        required=True
+    )
 
     args = parser.parse_args()
 
@@ -46,3 +56,19 @@ def parse_command_line_args():
         sys.exit()
     else:
         return args
+
+
+def __is_valid_file(value: str) -> str:
+    '''
+    Check an argument in argparse to be a path to an existing file
+    :param value: String path to analyze.
+    :return:
+    '''
+    # TODO
+    filenames_list = glob.glob(os.path.expanduser(os.path.expandvars(value)), recursive=True)
+    if len(filenames_list) == 0:
+        if '*' in value:
+            raise argparse.ArgumentTypeError(f"The file glob {value} did not match any files.")
+        else:
+            raise argparse.ArgumentTypeError(f"The file {value} does not exist.")
+    return filenames_list[0]
