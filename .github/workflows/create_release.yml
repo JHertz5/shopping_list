@@ -29,7 +29,11 @@ jobs:
       - name: Get repo version
         run: echo repo_version=$(./shopping_list/version.py) >> "$GITHUB_ENV"
 
-      # Run the unit tests.
+      - name: Print variables
+        run: |
+          echo "git describe = $env.git_describe"
+          echo "repo version = $env.repo_version"
+
       - name: Create new release
         if: ${{ ! startsWith(env.git_describe, env.repo_version) }}
         run: echo "hello"
