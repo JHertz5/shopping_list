@@ -1,12 +1,8 @@
-from . import data
 from . import report
 from . import utils
 
 
-def generate_shopping_list(output_filename: str, token_filename: str, sheet_name: str):
-    spreadsheet = data.open_spreadsheet(token_filename, sheet_name)
-    data_obj = data.Data(spreadsheet)
-
+def generate_shopping_list(spreadsheet, data_obj, output_filename):
     grouping_options = data_obj.get_ingredient_grouping_options()
 
     # Get user's grouping selection.

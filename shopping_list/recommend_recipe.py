@@ -60,10 +60,7 @@ def select_recipe(search_results):
     return new_recipe, search_complete
 
 
-def recommend_recipe(token_filename: str, sheet_name: str):
-    spreadsheet = data.open_spreadsheet(token_filename, sheet_name)
-    data_obj = data.Data(spreadsheet)
-
+def recommend_recipe(spreadsheet, data_obj):
     # Extract data from ingredient sheet.
     ingredient_list = data_obj.get_ingredient_list()
 
