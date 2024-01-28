@@ -76,7 +76,7 @@ class Data:
 
         return ingredients
 
-    def get_recipe_sheet_data(self):
+    def get_recipes_sheet_data(self):
         '''
         Construct recipes database.
         '''

@@ -13,7 +13,7 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
     ingredients = data_obj.get_ingredient_sheet_data(grouping_selection)
 
     # Extract data from recipes sheet.
-    recipes = data_obj.get_recipe_sheet_data()
+    recipes = data_obj.get_recipes_sheet_data()
 
     user_input_finalised = False
     while not user_input_finalised:
