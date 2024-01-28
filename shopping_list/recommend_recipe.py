@@ -2,7 +2,7 @@
 
 from . import utils
 
-from .spreadsheet import wrapper
+from shopping_list import data
 
 
 def recipe_search(ingredient_list, recipes):
@@ -60,24 +60,15 @@ def select_recipe(search_results):
     return new_recipe, search_complete
 
 
-def recommend_recipe(token_filename: str, sheet_name: str):
-    sheets = wrapper.Wrapper(token_filename, sheet_name)
-    print('data connected')
-
+def recommend_recipe(spreadsheet, data_obj):
     # Extract data from ingredient sheet.
-    sheets.download_ingredients_data()
-    ingredient_list = sheets.get_ingredient_list()
-    print('ingredients retrieved')
+    ingredient_list = data_obj.get_ingredient_list()
 
     # Extract data from recipes sheet.
-    sheets.download_recipe_data()
-    recipes = sheets.get_recipe_sheet_data()
-    print('recipes retrieved')
+    recipes = data_obj.get_recipes_sheet_data()
 
     # Extract data from the input sheet.
-    sheets.download_input_data()
-    recipes_to_buy_list = sheets.get_input_sheet_data()
-    print('input retrieved')
+    recipes_to_buy_list = data_obj.get_input_sheet_data()
 
     search_complete = False
     while not search_complete:
@@ -88,5 +79,5 @@ def recommend_recipe(token_filename: str, sheet_name: str):
             (new_recipe, search_complete) = select_recipe(search_results)
 
     if new_recipe != '':
-        sheets.add_new_recipe_to_buy(recipes_to_buy_list, new_recipe)
+        spreadsheet.add_new_recipe_to_buy(recipes_to_buy_list, new_recipe)
         print('{} written to spreadsheet'.format(new_recipe))

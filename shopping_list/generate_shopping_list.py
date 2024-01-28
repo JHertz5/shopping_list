@@ -1,35 +1,27 @@
-from . import spreadsheet
 from . import report
 from . import utils
 
 
-def generate_shopping_list(output_filename: str, token_filename: str, sheet_name: str):
-    sheets = spreadsheet.wrapper.Wrapper(token_filename, sheet_name)
-    print('data connected')
-
-    sheets.download_ingredients_data()
-    grouping_options = sheets.get_ingredient_grouping_options()
+def generate_shopping_list(spreadsheet, data_obj, output_filename):
+    grouping_options = data_obj.get_ingredient_grouping_options()
 
     # Get user's grouping selection.
     grouping_selection = get_user_grouping_selection(grouping_options)
     print('\t{} selected\n'.format(grouping_selection))
 
     # Extract data from ingredients sheet and construct ingredients database
-    ingredients = sheets.get_ingredient_sheet_data(grouping_selection)
-    print('ingredients retrieved')
+    ingredients = data_obj.get_ingredient_sheet_data(grouping_selection)
 
     # Extract data from recipes sheet.
-    sheets.download_recipe_data()
-    recipes = sheets.get_recipe_sheet_data()
-    print('recipes retrieved')
+    recipes = data_obj.get_recipes_sheet_data()
 
     user_input_finalised = False
     while not user_input_finalised:
 
         # Extract data from the input sheet.
-        sheets.download_input_data()
-        recipes_to_buy_list, exclusions_list, inclusions_list = sheets.get_input_sheet_data()
-        print('input retrieved')
+        data_obj.download_input_data(spreadsheet)
+        recipes_to_buy_list, exclusions_list, inclusions_list = data_obj.get_input_sheet_data()
+
         recipes, ingredients = generate_shopping_list_data(
             recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients
         )
