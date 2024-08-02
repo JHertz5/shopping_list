@@ -21,34 +21,13 @@ test_recipes_sheet_data = [
 # Testing unknown item in exclusions (Oranges)
 # Testing unknown item in inclusions (Beef)
 # Testing inlusions/exclusions conflict (Bananas)
-test_input_sheet_data_raw = [
-    ['Meals To Buy', 'Fruit Salad', 'Apple pie', 'Steak and Chips'],
-    ['Exclusions', 'Bananas', 'Oranges'],
-    ['Inclusions', 'Cucumber', 'Bananas', 'Beef']
-]
 test_input_sheet_data = {
     'Meals To Buy': ['Fruit Salad', 'Apple pie', 'Steak and Chips'],
     'Exclusions': ['Bananas', 'Oranges'],
     'Inclusions': ['Cucumber', 'Bananas', 'Beef']
 }
 
-test_ingredients = {
-    'Apples': {'aldi': 1, 'lidl': 2},
-    'Bananas': {'aldi': 0, 'lidl': 2},
-    'Cucumber': {'aldi': 0, 'lidl': 1}
-}
-
-test_recipes = {
-    'Fruit salad': ['Apples', 'Bananas']
-}
-
-test_input = {
-    'Meals to buy': ['Fruit Salad', 'Apple pie', 'Steak and Chips'],
-    'Exclusions': ['Oranges'],
-    'Inclusions': ['Cucumber'],
-}
-
-
+# TODO replace with a `with`?
 @mock.patch('sys.stdout')
 @mock.patch('gspread.Spreadsheet')
 class TestData(unittest.TestCase):
@@ -75,7 +54,6 @@ class TestData(unittest.TestCase):
 
         mock_stdout.write.assert_has_calls(expected_stdout)
 
-
     def test_download_recipes_data(self, mock_spreadsheet, mock_stdout):
         mock_spreadsheet.worksheet().get_values.return_value = test_recipes_sheet_data
         test_data_obj = data.Data(mock_spreadsheet)
@@ -86,7 +64,6 @@ class TestData(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
-
         expected_stdout = []
         expected_stdout.append(mock.call('ingredients retrieved'))
         expected_stdout.append(mock.call('\n'))
@@ -99,10 +76,12 @@ class TestData(unittest.TestCase):
 
         mock_stdout.write.assert_has_calls(expected_stdout)
 
-
-
     def test_download_input_data(self, mock_spreadsheet, mock_stdout):
-        mock_spreadsheet.worksheet().get_values.return_value = test_input_sheet_data_raw
+        mock_spreadsheet.worksheet().get_values.return_value = [
+            ['Meals To Buy', 'Fruit Salad', 'Apple pie', 'Steak and Chips'],
+            ['Exclusions', 'Bananas', 'Oranges'],
+            ['Inclusions', 'Cucumber', 'Bananas', 'Beef']
+        ]
         test_data_obj = data.Data(mock_spreadsheet)
         test_data_obj.download_input_data(mock_spreadsheet)
         actual = test_data_obj._input_sheet_data
@@ -111,7 +90,6 @@ class TestData(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
-
         expected_stdout = []
         expected_stdout.append(mock.call('ingredients retrieved'))
         expected_stdout.append(mock.call('\n'))
@@ -123,7 +101,6 @@ class TestData(unittest.TestCase):
         expected_stdout.append(mock.call('\n'))
 
         mock_stdout.write.assert_has_calls(expected_stdout)
-
 
     def test_add_new_recipe_to_buy(self, mock_spreadsheet, mock_stdout):
         new_recipe = 'Stir-fry'
