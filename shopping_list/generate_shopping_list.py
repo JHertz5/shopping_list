@@ -1,3 +1,5 @@
+import pathlib
+
 from . import report
 from . import utils
 
@@ -39,7 +41,9 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
                     recipes.get_quantity_dict_of_selected(),
                     ingredients.get_dict_of_selected()
                 )
-                print('shopping list written to ' + output_filename)
+                # Get the absolute path of the output file as a string.
+                output_filename_abs_path = str(pathlib.Path(output_filename).parent.resolve())
+                print('shopping list written to ' + output_filename_abs_path)
 
             # Refresh file.
             case 'r':
