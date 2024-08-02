@@ -2,8 +2,6 @@
 
 from . import utils
 
-from shopping_list import data
-
 
 def recipe_search(ingredient_list, recipes):
     # get ingredient to search for from user input
