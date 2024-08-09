@@ -79,5 +79,5 @@ def recommend_recipe(spreadsheet, data_obj):
             (new_recipe, search_complete) = select_recipe(search_results)
 
     if new_recipe != '':
-        spreadsheet.add_new_recipe_to_buy(recipes_to_buy_list, new_recipe)
+        data_obj.add_new_recipe_to_buy(spreadsheet, new_recipe)
         print('{} written to spreadsheet'.format(new_recipe))
