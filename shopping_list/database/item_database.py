@@ -18,13 +18,13 @@ class ItemDatabase:
         for item_name in self._item_dict.keys():
             self._item_dict[item_name].reset_quantity()
 
-    def incr_quantity(self, item_name):
+    def incr_quantity(self, item_name, incr_num=1):
         assert isinstance(item_name, str)
 
         if not item_name in self._item_dict.keys():
             self.insert(item_name)
 
-        self._item_dict[item_name].incr_quantity()
+        self._item_dict[item_name].incr_quantity(incr_num)
 
     def insert(self, item_name, group='none'):
         self._item_dict[item_name] = item.Item(group=group)
