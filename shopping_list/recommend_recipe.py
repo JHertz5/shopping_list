@@ -67,9 +67,6 @@ def recommend_recipe(spreadsheet, data_obj):
     # Extract data from recipes sheet.
     recipes = data_obj.get_recipes_sheet_data()
 
-    # Extract data from the input sheet.
-    recipes_to_buy_list = data_obj.get_input_sheet_data()
-
     search_complete = False
     while not search_complete:
         search_results = recipe_search(ingredient_list, recipes)

@@ -90,7 +90,7 @@ def get_user_grouping_selection(grouping_options):
 def generate_shopping_list_data(recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients):
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
-    recipes = update_recipe_quantities(recipes, recipes_to_buy_list)
+    update_recipe_quantities(recipes, recipes_to_buy_list)
     selected_recipes_dict = recipes.get_dict_of_selected()
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
@@ -110,7 +110,6 @@ def update_recipe_quantities(recipes, recipes_to_buy_list):
     # Update the quantities in the recipe database, based on the recipes to be bought.
     for recipe_name in recipes_to_buy_list:
         recipes.incr_quantity(recipe_name)
-    return recipes
 
 
 def update_ingredient_quantities(ingredients, selected_recipes_dict, exclusions_list, inclusions_list):
