@@ -91,11 +91,11 @@ def generate_shopping_list_data(recipes_to_buy_list, exclusions_list, inclusions
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
     recipes = update_recipe_quantities(recipes, recipes_to_buy_list)
-    recipe_ingredient_list = recipes.get_ingredient_list_of_selected()
+    selected_recipes_dict = recipes.get_dict_of_selected()
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
     ingredients = update_ingredient_quantities(
-        ingredients, recipe_ingredient_list, exclusions_list, inclusions_list
+        ingredients, selected_recipes_dict, exclusions_list, inclusions_list
     )
 
     report.preview.print_report(
@@ -113,10 +113,13 @@ def update_recipe_quantities(recipes, recipes_to_buy_list):
     return recipes
 
 
-def update_ingredient_quantities(ingredients, recipe_ingredient_list, exclusions_list, inclusions_list):
+def update_ingredient_quantities(ingredients, selected_recipes_dict, exclusions_list, inclusions_list):
     # Update the quantities in the ingredients database, based on the recipe quantities.
-    for ingredient_name in recipe_ingredient_list:
-        ingredients.incr_quantity(ingredient_name)
+    for recipe_name in selected_recipes_dict:
+        ingredient_list = selected_recipes_dict[recipe_name].ingredient_list
+        for ingredient_name in ingredient_list:
+            recipe_quantity = selected_recipes_dict[recipe_name].quantity
+            ingredients.incr_quantity(ingredient_name, recipe_quantity)
     # Update the quantities in the ingredients database, based on the exclusions.
     for ingredient_name in exclusions_list:
         ingredients.reset_quantity(ingredient_name)
