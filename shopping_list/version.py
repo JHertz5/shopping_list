@@ -7,7 +7,7 @@ import subprocess
 version_dict = {
     'major': 3,
     'minor': 5,
-    'patch': 5
+    'patch': 6
 }
 version_string = '.'.join(str(c) for c in version_dict.values())
 
