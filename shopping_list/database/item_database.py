@@ -30,19 +30,11 @@ class ItemDatabase:
         self._item_dict[item_name] = item.Item(group=group)
 
     def get_names_of_selected(self):
-        return_list = []
-        for name, obj in self._item_dict.items():
-            if obj.quantity > 0:
-                return_list.append(name)
-        return return_list
+        return [name for name, obj in self._item_dict.items() if obj.quantity > 0]
 
     def get_quantity_dict_of_selected(self):
         name_list = self.get_names_of_selected()
-        return_dict = {}
-        for name in name_list:
-            return_dict[name] = self._item_dict[name].quantity
-        return return_dict
+        return {name: self._item_dict[name].quantity for name in name_list}
 
     def get_dict_of_selected(self):
-        return_dict = {x: self._item_dict[x] for x in self._item_dict if self._item_dict[x].quantity > 0}
-        return return_dict
+        return {x: self._item_dict[x] for x in self._item_dict if self._item_dict[x].quantity > 0}
