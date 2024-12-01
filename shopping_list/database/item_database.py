@@ -14,7 +14,7 @@ class ItemDatabase:
         assert item_name in self._item_dict.keys()
         self._item_dict[item_name].reset_quantity()
 
-    def reset_quantites(self):
+    def reset_quantities(self):
         for item_name in self._item_dict.keys():
             self._item_dict[item_name].reset_quantity()
 

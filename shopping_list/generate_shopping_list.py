@@ -49,8 +49,8 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
             case 'r':
                 print('\trefresh list selected')
                 # Reset the quantities of each shopping list item.
-                recipes.reset_quantites()
-                ingredients.reset_quantites()
+                recipes.reset_quantities()
+                ingredients.reset_quantities()
 
             # Quit.
             case 'q':
