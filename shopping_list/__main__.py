@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" main script for user interface """
+"""main script for user interface"""
 
 import gspread
 
@@ -12,9 +12,7 @@ from . import data
 
 def print_help_message(options_dict):
     help_string = "usage: " + __package__ + " "
-    options_strings = [
-        "[" + " | ".join(options_dict[key]) + "] " for key in options_dict.keys()
-    ]
+    options_strings = ["[" + " | ".join(options_dict[key]) + "] " for key in options_dict.keys()]
     print(help_string + "".join(options_strings))
 
 
@@ -36,8 +34,6 @@ def main():
     data_obj = data.Data(spreadsheet)
 
     if args.generate_list is not None:
-        generate_shopping_list.generate_shopping_list(
-            spreadsheet, data_obj, args.generate_list
-        )
+        generate_shopping_list.generate_shopping_list(spreadsheet, data_obj, args.generate_list)
     elif args.recommend_recipe:
         recommend_recipe.recommend_recipe(spreadsheet, data_obj)

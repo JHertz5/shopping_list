@@ -3,7 +3,7 @@ import subprocess
 
 from shopping_list import version
 
-expected_version_string = (subprocess.check_output(['git', 'describe', '--tags', '--abbrev=0'])).strip().decode('utf-8')
+expected_version_string = (subprocess.check_output(["git", "describe", "--tags", "--abbrev=0"])).strip().decode("utf-8")
 
 
 class TestVersion(unittest.TestCase):
