@@ -33,3 +33,5 @@ jobs:
         with:
           fetch-depth: 0
       - uses: psf/black@stable
+        with:
+          options: "--check --line-length 120"
