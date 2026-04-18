@@ -9,7 +9,7 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
 
     # Get user's grouping selection.
     grouping_selection = get_user_grouping_selection(grouping_options)
-    print('\t{} selected\n'.format(grouping_selection))
+    print("\t{} selected\n".format(grouping_selection))
 
     # Extract data from ingredients sheet and construct ingredients database
     ingredients = data_obj.get_ingredient_sheet_data(grouping_selection)
@@ -29,53 +29,53 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
         )
 
         write_list_input = get_user_action_selection()
-        user_input_finalised = write_list_input in ['w', 'q']
+        user_input_finalised = write_list_input in ["w", "q"]
 
         match write_list_input:
             # Write file.
-            case'w':
-                print('\twrite list selected')
+            case "w":
+                print("\twrite list selected")
                 # Generate checklist file.
                 report.checklist.write_report(
                     output_filename,
                     recipes.get_quantity_dict_of_selected(),
-                    ingredients.get_dict_of_selected()
+                    ingredients.get_dict_of_selected(),
                 )
                 # Get the absolute path of the output file as a string.
                 output_filename_abs_path = str(pathlib.Path(output_filename).parent.resolve())
-                print('shopping list written to ' + output_filename_abs_path)
+                print("shopping list written to " + output_filename_abs_path)
 
             # Refresh file.
-            case 'r':
-                print('\trefresh list selected')
+            case "r":
+                print("\trefresh list selected")
                 # Reset the quantities of each shopping list item.
                 recipes.reset_quantities()
                 ingredients.reset_quantities()
 
             # Quit.
-            case 'q':
+            case "q":
                 utils.quit()
 
-    print('exiting')
+    print("exiting")
     return
 
 
 def get_user_grouping_selection(grouping_options):
 
-    grouping_options = ['Unordered'] + grouping_options
+    grouping_options = ["Unordered"] + grouping_options
     max_grouping_selection = len(grouping_options) - 1
 
     user_input_is_valid = False
     while not user_input_is_valid:
 
         # Print grouping options.
-        print('\nsort options:')
+        print("\nsort options:")
         for index, grouping_option in enumerate(grouping_options):
-            print('\t{} - {}'.format(index, grouping_option))
+            print("\t{} - {}".format(index, grouping_option))
 
-        grouping_selection_str = input('pick sort method, or [q]uit: ')
+        grouping_selection_str = input("pick sort method, or [q]uit: ")
 
-        if grouping_selection_str == 'q':
+        if grouping_selection_str == "q":
             utils.quit()
 
         # Check validity of selection.
@@ -94,15 +94,13 @@ def generate_shopping_list_data(recipes_to_buy_list, exclusions_list, inclusions
     selected_recipes_dict = recipes.get_dict_of_selected()
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
-    ingredients = update_ingredient_quantities(
-        ingredients, selected_recipes_dict, exclusions_list, inclusions_list
-    )
+    ingredients = update_ingredient_quantities(ingredients, selected_recipes_dict, exclusions_list, inclusions_list)
 
     report.preview.print_report(
         recipes.get_quantity_dict_of_selected(),
-        ingredients.get_quantity_dict_of_selected()
+        ingredients.get_quantity_dict_of_selected(),
     )
-    print('shopping list generated')
+    print("shopping list generated")
     return recipes, ingredients
 
 
@@ -132,9 +130,9 @@ def get_user_action_selection():
 
     user_input_is_valid = False
     while not user_input_is_valid:
-        write_list_input = input('[w]rite list, [r]efresh list or [q]uit?: ')
-        user_input_is_valid = write_list_input in ['w', 'r', 'q']
+        write_list_input = input("[w]rite list, [r]efresh list or [q]uit?: ")
+        user_input_is_valid = write_list_input in ["w", "r", "q"]
         if not user_input_is_valid:
-            print('Error: invalid input ' + write_list_input)
+            print("Error: invalid input " + write_list_input)
 
     return write_list_input

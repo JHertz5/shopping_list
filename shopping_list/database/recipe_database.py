@@ -3,9 +3,9 @@ from .item_database import ItemDatabase
 
 
 class RecipeDatabase(ItemDatabase):
-    '''
+    """
     A database of recipes on a shopping list.
-    '''
+    """
 
     def insert(self, recipe_name, ingredient_list=[]):
         self._item_dict[recipe_name] = recipe.Recipe(ingredient_list=ingredient_list)

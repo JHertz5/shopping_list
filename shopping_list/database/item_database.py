@@ -2,9 +2,9 @@ from . import item
 
 
 class ItemDatabase:
-    '''
+    """
     A database of items on a shopping list.
-    '''
+    """
 
     def __init__(self):
         self._item_dict = {}
@@ -26,7 +26,7 @@ class ItemDatabase:
 
         self._item_dict[item_name].incr_quantity(incr_num)
 
-    def insert(self, item_name, group='none'):
+    def insert(self, item_name, group="none"):
         self._item_dict[item_name] = item.Item(group=group)
 
     def get_names_of_selected(self):

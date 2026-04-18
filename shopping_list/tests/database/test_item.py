@@ -2,7 +2,6 @@ import unittest
 
 from shopping_list.database import item
 
-
 test_group_int = 1
 
 
@@ -15,14 +14,14 @@ class TestItem(unittest.TestCase):
     def test_item_quantity(self):
         test_item = item.Item()
         self.assertIsInstance(test_item.quantity, int)
-        self.assertEqual(test_item.quantity, 0, 'default is incorrect')
+        self.assertEqual(test_item.quantity, 0, "default is incorrect")
         test_item.quantity = 5
         self.assertEqual(test_item.quantity, 5)
 
     def test_item_group_default(self):
         test_item = item.Item()
         self.assertIsInstance(test_item.group, str)
-        self.assertEqual(test_item.group, 'none')
+        self.assertEqual(test_item.group, "none")
 
     def test_item_group_int(self):
         test_item = item.Item(group=test_group_int)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-''' main script for user interface '''
+"""main script for user interface"""
 
 import gspread
 
@@ -22,8 +22,9 @@ def open_spreadsheet(token_filename, sheet_name):
 
     # Find a spreadsheet by name and open it.
     spreadsheet = client.open(sheet_name)
-    print('data connected')
+    print("data connected")
     return spreadsheet
+
 
 def main():
 
