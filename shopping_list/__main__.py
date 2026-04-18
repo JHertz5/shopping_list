@@ -3,7 +3,6 @@
 ''' main script for user interface '''
 
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 from . import command_line_args
 from . import generate_shopping_list
