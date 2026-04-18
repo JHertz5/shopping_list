@@ -25,6 +25,7 @@ def open_spreadsheet(token_filename, sheet_name):
     print('data connected')
     return spreadsheet
 
+
 def main():
 
     args = command_line_args.parse_command_line_args()
