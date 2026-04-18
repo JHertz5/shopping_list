@@ -35,3 +35,4 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --line-length 120"
+          version: 26.3.0
