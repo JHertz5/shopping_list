@@ -20,6 +20,9 @@ These rules can be run from a Linux device.
     - If this is not the case, you can run the shopping list script (`./bin/shopping_list`) directly. In this case, the path to the token must be provided as the `-t` argument, while the name of the spreadsheet must be provided as the `-s` argument.
 4. Install any [todo.txt](http://todotxt.org/) compatible app, e.g. [SimpleTask](https://github.com/mpcjanssen/simpletask-android/) if on Android (although SimpleTask is heartbreakingly no longer maintained or available on f-droid. It must be downloaded through the [APK](https://fxedel.gitlab.io/fdroid-website/en/packages/nl.mpcjanssen.simpletask/)). Once you have a script-generated output file (provided to the shopping list script with the `-g` argument), you'll need to set this app up to use that file.
 
+> [!NOTE]
+> On Android 13 and above, file access permissions may prevent SimpleTask from accessing non-media files. To work around this, save your todo list file with a media file extension (e.g. `.mp3`) so SimpleTask can access it.
+
 ## Usage
 1. Run `make list` in the root of the repo.
 2. Follow the prompts in the script.
