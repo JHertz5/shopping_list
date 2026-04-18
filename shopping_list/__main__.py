@@ -18,15 +18,8 @@ def print_help_message(options_dict):
 
 
 def open_spreadsheet(token_filename, sheet_name):
-    # use creds to create a client to interact with the Google Drive API
-    scope = [
-        'https://spreadsheets.google.com/feeds',
-        'https://www.googleapis.com/auth/drive'
-    ]
-    # TODO put filename in config file
-    creds = ServiceAccountCredentials.from_json_keyfile_name(
-        token_filename, scope)
-    client = gspread.authorize(creds)
+    # Use the token file to create a client to interact with the Google Drive API.
+    client = gspread.service_account(filename=token_filename)
 
     # Find a spreadsheet by name and open it.
     spreadsheet = client.open(sheet_name)
