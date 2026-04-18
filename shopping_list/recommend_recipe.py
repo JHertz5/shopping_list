@@ -72,7 +72,7 @@ def recommend_recipe(spreadsheet, data_obj):
         if search_results == []:
             print("no recipes containing ingredient")
         else:
-            (new_recipe, search_complete) = select_recipe(search_results)
+            new_recipe, search_complete = select_recipe(search_results)
 
     if new_recipe != "":
         data_obj.add_new_recipe_to_buy(spreadsheet, new_recipe)

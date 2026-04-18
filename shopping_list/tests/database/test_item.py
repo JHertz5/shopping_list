@@ -2,7 +2,6 @@ import unittest
 
 from shopping_list.database import item
 
-
 test_group_int = 1
 
 
