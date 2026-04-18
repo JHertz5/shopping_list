@@ -22,9 +22,7 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
 
         # Extract data from the input sheet.
         data_obj.download_input_data(spreadsheet)
-        recipes_to_buy_list, exclusions_list, inclusions_list = (
-            data_obj.get_input_sheet_data()
-        )
+        recipes_to_buy_list, exclusions_list, inclusions_list = data_obj.get_input_sheet_data()
 
         recipes, ingredients = generate_shopping_list_data(
             recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients
@@ -44,9 +42,7 @@ def generate_shopping_list(spreadsheet, data_obj, output_filename):
                     ingredients.get_dict_of_selected(),
                 )
                 # Get the absolute path of the output file as a string.
-                output_filename_abs_path = str(
-                    pathlib.Path(output_filename).parent.resolve()
-                )
+                output_filename_abs_path = str(pathlib.Path(output_filename).parent.resolve())
                 print("shopping list written to " + output_filename_abs_path)
 
             # Refresh file.
@@ -83,9 +79,7 @@ def get_user_grouping_selection(grouping_options):
             utils.quit()
 
         # Check validity of selection.
-        user_input_is_valid = utils.string_is_valid_int(
-            grouping_selection_str, max=max_grouping_selection
-        )
+        user_input_is_valid = utils.string_is_valid_int(grouping_selection_str, max=max_grouping_selection)
 
     # Convert result from int to string to use as key.
     grouping_selection = grouping_options[int(grouping_selection_str)]
@@ -93,18 +87,14 @@ def get_user_grouping_selection(grouping_options):
     return grouping_selection
 
 
-def generate_shopping_list_data(
-    recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients
-):
+def generate_shopping_list_data(recipes_to_buy_list, exclusions_list, inclusions_list, recipes, ingredients):
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
     update_recipe_quantities(recipes, recipes_to_buy_list)
     selected_recipes_dict = recipes.get_dict_of_selected()
 
     # Update the quantities in the recipe database, based on the recipes to be bought.
-    ingredients = update_ingredient_quantities(
-        ingredients, selected_recipes_dict, exclusions_list, inclusions_list
-    )
+    ingredients = update_ingredient_quantities(ingredients, selected_recipes_dict, exclusions_list, inclusions_list)
 
     report.preview.print_report(
         recipes.get_quantity_dict_of_selected(),
@@ -120,9 +110,7 @@ def update_recipe_quantities(recipes, recipes_to_buy_list):
         recipes.incr_quantity(recipe_name)
 
 
-def update_ingredient_quantities(
-    ingredients, selected_recipes_dict, exclusions_list, inclusions_list
-):
+def update_ingredient_quantities(ingredients, selected_recipes_dict, exclusions_list, inclusions_list):
     # Update the quantities in the ingredients database, based on the recipe quantities.
     for recipe_name in selected_recipes_dict:
         ingredient_list = selected_recipes_dict[recipe_name].ingredient_list

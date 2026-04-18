@@ -1,4 +1,4 @@
-""" function to recommend recipe and add it to input """
+"""function to recommend recipe and add it to input"""
 
 from . import utils
 
@@ -13,9 +13,7 @@ def recipe_search(ingredient_list, recipes):
         user_input_ingredient = input("input ingredient or [q]uit: ")
         if user_input_ingredient == "q":
             utils.quit()
-        search_ingredient = (
-            user_input_ingredient.title()
-        )  # ingredients are in Title Case
+        search_ingredient = user_input_ingredient.title()  # ingredients are in Title Case
 
         if search_ingredient not in ingredient_list:
             print("{} not in ingredients list".format(search_ingredient))
@@ -37,9 +35,7 @@ def select_recipe(search_results):
         for index, recipe in enumerate(search_results):
             print("\t{} - {}".format(index, recipe))
 
-        user_input_raw = input(
-            "select recipe to add to list or [n]ew search or [q]uit: "
-        )
+        user_input_raw = input("select recipe to add to list or [n]ew search or [q]uit: ")
         # check user input
         if user_input_raw == "q":
             utils.quit()
@@ -53,11 +49,7 @@ def select_recipe(search_results):
                 if 0 <= recipe_selection_int < len(search_results):
                     input_valid = True
                 else:
-                    print(
-                        "input must be in range [{}-{}]".format(
-                            0, len(search_results) - 1
-                        )
-                    )
+                    print("input must be in range [{}-{}]".format(0, len(search_results) - 1))
             except BaseException:
                 print("recipe selection must be int")
 

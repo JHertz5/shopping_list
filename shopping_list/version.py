@@ -11,9 +11,7 @@ version_string = ".".join(str(c) for c in version_dict.values())
 def string_version_info():
 
     sVersion, sShaNum = get_version_info()
-    return_string = (
-        "shopping_list version: " + str(sVersion) + ", Git commit SHA: " + str(sShaNum)
-    )
+    return_string = "shopping_list version: " + str(sVersion) + ", Git commit SHA: " + str(sShaNum)
     return return_string
 
 
@@ -35,9 +33,7 @@ def get_version_info():
             sha_num = str(version_list[-1][1:])
         except (IndexError, subprocess.CalledProcessError):
             version_string = str(version_list[0])
-            git_tag_version = subprocess.check_output(
-                ["git", "rev-parse", "--short", "HEAD"]
-            )
+            git_tag_version = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"])
             git_tag_version = str(git_tag_version.decode("utf-8")).split("\n")
             sha_num = str(git_tag_version[0])
         os.chdir(return_path)

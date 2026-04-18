@@ -21,27 +21,21 @@ class Data:
         """
         Pull data from the ingredients sheet into a list of dicts.
         """
-        self._ingredients_sheet_data = spreadsheet.worksheet(
-            ingredients_sheet_name
-        ).get_all_records()
+        self._ingredients_sheet_data = spreadsheet.worksheet(ingredients_sheet_name).get_all_records()
         print("ingredients retrieved")
 
     def download_recipes_data(self, spreadsheet):
         """
         Pull data from the recipes sheet into a list of lists.
         """
-        self._recipes_sheet_data = spreadsheet.worksheet(
-            recipes_sheet_name
-        ).get_values()
+        self._recipes_sheet_data = spreadsheet.worksheet(recipes_sheet_name).get_values()
         print("recipes retrieved")
 
     def download_input_data(self, spreadsheet):
         """
         Pull data from the inputs sheet into a list of lists.
         """
-        input_sheet_data_raw = spreadsheet.worksheet(input_sheet_name).get_values(
-            major_dimension="COLUMNS"
-        )
+        input_sheet_data_raw = spreadsheet.worksheet(input_sheet_name).get_values(major_dimension="COLUMNS")
         self._input_sheet_data = {}
         for column in input_sheet_data_raw:
             column_heading = column[0]
@@ -55,9 +49,7 @@ class Data:
         recipes_to_buy_list = self._input_sheet_data["Meals To Buy"]
         new_recipe_row = len(recipes_to_buy_list) + 1
         new_recipe_col = 1
-        spreadsheet.worksheet(input_sheet_name).update_cell(
-            new_recipe_row, new_recipe_col, new_recipe_name
-        )
+        spreadsheet.worksheet(input_sheet_name).update_cell(new_recipe_row, new_recipe_col, new_recipe_name)
 
     def get_ingredient_list(self):
         return [x["Name"] for x in self._ingredients_sheet_data]

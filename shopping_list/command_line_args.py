@@ -31,9 +31,7 @@ def parse_command_line_args():
         type=str,
         help="generate a shopping list file with the given filename",
     )
-    script_selection_group.add_argument(
-        "-r", "--recommend_recipe", action="store_true", help="recommend recipes"
-    )
+    script_selection_group.add_argument("-r", "--recommend_recipe", action="store_true", help="recommend recipes")
 
     parser.add_argument(
         "-t",
@@ -69,14 +67,10 @@ def __is_valid_file(value: str) -> str:
     :return:
     """
     # TODO
-    filenames_list = glob.glob(
-        os.path.expanduser(os.path.expandvars(value)), recursive=True
-    )
+    filenames_list = glob.glob(os.path.expanduser(os.path.expandvars(value)), recursive=True)
     if len(filenames_list) == 0:
         if "*" in value:
-            raise argparse.ArgumentTypeError(
-                f"The file glob {value} did not match any files."
-            )
+            raise argparse.ArgumentTypeError(f"The file glob {value} did not match any files.")
         else:
             raise argparse.ArgumentTypeError(f"The file {value} does not exist.")
     return filenames_list[0]

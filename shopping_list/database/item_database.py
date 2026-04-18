@@ -37,8 +37,4 @@ class ItemDatabase:
         return {name: self._item_dict[name].quantity for name in name_list}
 
     def get_dict_of_selected(self):
-        return {
-            x: self._item_dict[x]
-            for x in self._item_dict
-            if self._item_dict[x].quantity > 0
-        }
+        return {x: self._item_dict[x] for x in self._item_dict if self._item_dict[x].quantity > 0}
