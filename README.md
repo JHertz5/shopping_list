@@ -8,6 +8,7 @@ The expected use case for this project is to run on an Android device. Follow th
 1. Install [Termux](https://f-droid.org/en/packages/com.termux/) (a Linux terminal emulator). In Termux, run the following commands:
 2. In Termux, run `pkg install git make python` to install supporting Linux programs.
 3. In Termux, run `termux-setup-storage` to set-up access from Termux to main Android storage. This enables you to set the shopping list generator to write to a file that is visible to your todo.txt app.
+4. In Termux, run `pkg install python-cryptography`. This is a dependency of gspread that needed rust and took ages to install when via `pip`, so installed it ahead of time saves some hassle.
 
 ## Generic Set Up
 These rules can be run from a Linux device.
