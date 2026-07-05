@@ -9,6 +9,7 @@ The expected use case for this project is to run on an Android device. Follow th
 2. In Termux, run `pkg install git make python` to install supporting Linux programs.
 3. In Termux, run `termux-setup-storage` to set-up access from Termux to main Android storage. This enables you to set the shopping list generator to write to a file that is visible to your todo.txt app.
 4. In Termux, run `pkg install python-cryptography`. This is a dependency of gspread that needed rust and took ages to install when via `pip`, so installing it ahead of time saves some hassle.
+5. To set up lists via clipboard rather than writing directly to a file, in Termux, run `pkg install termux-api` to get access to [termux-clipboard-set](https://wiki.termux.com/wiki/Termux-clipboard-set), which allows Termux to write to the Android clipboard.
 
 ## Generic Set Up
 These steps can be run from any Linux device.
@@ -24,9 +25,14 @@ These steps can be run from any Linux device.
 > On Android 13 and above, file access permissions may prevent SimpleTask from accessing non-media files. To work around this, save your todo list file with a media file extension (e.g. `.mp3`) so SimpleTask can access it.
 
 ## Usage
+
+### Method 1: Write to File
 1. Run `make list` in the root of the repo.
 2. Follow the prompts in the script.
 3. Open the file (provided with the `-g` argument) within the todo.txt app.
+
+### Method 2: Write to Clipboard
+To set this up, run
 
 ## Spreadsheet Format
 TODO
