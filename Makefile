@@ -1,6 +1,6 @@
 # Install all required python packages.
 init:
-	pip install -r requirements.txt
+	pip install -r requirements.txt --prefer-binary
 
 # Run a suite of unit tests.
 test:
