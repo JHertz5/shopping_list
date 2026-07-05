@@ -16,7 +16,7 @@ CB_SCRIPT_NAME=../jeffrey.sh
 # that it can be copied into a todo.txt app.
 cb_script:
 	@echo "#!/bin/bash \n\
-	cd ../shopping_list \n\
+	cd shopping_list \n\
 	make list \n\
 	cat ${DEFAULT_LIST_FILE} | termux-clipboard-set \n\
 	" > ${CB_SCRIPT_NAME}
